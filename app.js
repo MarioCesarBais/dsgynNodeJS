@@ -1,6 +1,6 @@
 const cloudinary = require('cloudinary').v2;
 
-require('dotenv').config();
+require('dotenv').config(); // para produção comentar esta linha e informar variáveis de ambiente em settings
 
 const path = require('path');
 const fs = require('fs');
@@ -46,7 +46,7 @@ cloudinary.config({
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
+  cloudinary,
   params: {
     folder: 'images', // Especifique a pasta no Cloudinary onde deseja armazenar as imagens
     allowedFormats: ['jpg', 'jpeg', 'png'],
@@ -89,7 +89,7 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images'))); // transferido p/ Cloudinary
 app.use(
   session({
     secret: 'my secret',

@@ -1,0 +1,6 @@
+.banner {
+  background-size: cover;
+  background-position: top;
+  padding: 20vh 0;
+  background-image: url('/images/sedepaisagem.jpg');
+}
