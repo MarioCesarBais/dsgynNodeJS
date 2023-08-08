@@ -4,3 +4,4 @@ server.key
 nodemon.json
 .env
 package-lock.json
+access.log

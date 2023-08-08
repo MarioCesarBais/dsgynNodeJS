@@ -125,7 +125,9 @@ form {
 .mobile-nav__item a:hover,
 .mobile-nav__item a.active,
 .mobile-nav__item button:hover,
-.mobile-nav__item button:active {
+.mobile-nav__item button:active,
+.two-col .one label:hover,
+.two-col .two label a:hover {
   background: #00695c;
   color: white;
   border-radius: 3px;
