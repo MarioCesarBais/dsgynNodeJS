@@ -3,3 +3,4 @@ server.cert
 server.key
 nodemon.json
 .env
+pacckage-lock.json

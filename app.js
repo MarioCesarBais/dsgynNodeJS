@@ -1,3 +1,5 @@
+const cloudinary = require('cloudinary').v2;
+
 require('dotenv').config();
 
 const path = require('path');
@@ -25,7 +27,6 @@ const User = require('./models/user');
 const mongoUser = process.env.MONGO_USER;
 const mongoPassword = process.env.MONGO_PASSWORD;
 const mongoDefaultDatabase = process.env.MONGO_DEFAULT_DATABASE;
-// const stripeKey = process.env.STRIPE_KEY;
 
 const MONGODB_URI = `mongodb+srv://${mongoUser}:${mongoPassword}@cluster0.fzkflsz.mongodb.net/${mongoDefaultDatabase}?retryWrites=true&w=majority`
 
@@ -36,32 +37,28 @@ const store = new MongoDBStore({
 });
 const csrfProtection = csrf();
 
-// const privateKey = fs.readFileSync('server.key');
-// const certificate = fs.readFileSync('server.cert');
+cloudinary.config({
+  cloud_name: process.env.YOUR_CLOUD_NAME,
+  api_key: process.env.YOUR_API_KEY,
+  api_secret: process.env.YOUR_API_SECRET
+});
 
-// const fileStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'images');
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, new Date().toISOString() + '-' + file.originalname);
-//   }
-// });
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'images');
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().getTime() + '-' + file.originalname);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'images', // Especifique a pasta no Cloudinary onde deseja armazenar as imagens
+    allowedFormats: ['jpg', 'jpeg', 'png'],
+    transformation: [{ width: 500, height: 500, crop: 'limit' }]
   }
 });
 
 const fileFilter = (req, file, cb) => {
   if (
+    file.mimetype === 'image/jpeg' ||
     file.mimetype === 'image/png' ||
-    file.mimetype === 'image/jpg' ||
-    file.mimetype === 'image/jpeg'
+    file.mimetype === 'image/jpg'
   ) {
     cb(null, true);
   } else {
@@ -86,9 +83,11 @@ app.use(compression());
 app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+  multer({ storage, fileFilter }).single('image')
 );
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(
@@ -143,7 +142,7 @@ app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
   console.log(error)
-  isAuthenticated = req.session ? req.session.isLoggedIn : false
+  const isAuthenticated = req.session ? req.session.isLoggedIn : false
   res.status(500).render('500', {
     pageTitle: 'Error!',
     path: '/500',
