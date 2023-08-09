@@ -1,0 +1,31 @@
+footer {
+    background: linear-gradient(135deg, lightgray, whitesmoke);
+    display: flex;
+    justify-content: space-around; /* Alterado para space-between */
+    border: 1px solid darkgreen;
+    border-radius: 10px;
+    padding: 0 1rem;
+    margin: 0 1rem 1rem 1rem;
+    align-items: center;
+    font-size: 1rem;
+}
+
+footer > a {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 1rem;
+    /* font-size: 1.5rem; /* Ajuste o valor conforme necessário */
+    /* height: 3rem; Ajuste o valor conforme necessário */
+}
+
+.heart {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+footer h6 {
+    margin: 0;
+}
