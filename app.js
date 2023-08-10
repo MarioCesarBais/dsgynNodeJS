@@ -21,6 +21,7 @@ const morgan = require('morgan');
 const errorController = require('./controllers/error');
 const shopController = require('./controllers/shop');
 const isAuth = require('./middleware/is-auth');
+const isAdm = require('./middleware/is-adm');
 const User = require('./models/user');
 
 // Use as variáveis de ambiente conforme necessário no seu código
