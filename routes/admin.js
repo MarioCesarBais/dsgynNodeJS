@@ -24,7 +24,7 @@ router.post(
       .isLength({ min: 3 })
       .trim(),
     body('description')
-      .isLength({ min: 5, max: 1000 })
+      .isLength({ min: 5 })
       .trim()
   ],
   isAuth,

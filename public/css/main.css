@@ -77,6 +77,8 @@ form {
 .main-header__item button:hover,
 .main-header__item button:active {
   color: #ffeb3b;
+  scale: 120%;
+  transition: 2s;
 }
 
 .mobile-nav {
@@ -132,6 +134,8 @@ form {
   background: #00695c;
   color: white;
   border-radius: 3px;
+  scale: 120%;
+  transition: 2s;
 }
 
 #side-menu-toggle {
@@ -152,6 +156,8 @@ form {
 #side-menu-toggle:hover {
   color: #ffeb3b;
   border-color: #ffeb3b;
+  scale: 120%;
+  transition: 2s;
 }
 
 .backdrop {
@@ -226,6 +232,7 @@ card__image img {
 .btn:active {
   background-color: #00695c;
   color: white;
+  scale: 120%;
 }
 
 .btn.danger {
@@ -237,6 +244,8 @@ card__image img {
 .btn.danger:active {
   background: red;
   color: white;
+  scale: 120%;
+  transition: 2s;
 }
 
 .user-message {
@@ -273,6 +282,8 @@ card__image img {
 .pagination a.active {
   background: #00695c;
   color: white;
+  scale: 120%;
+  transition: 2s;
 }
 
 button:hover,

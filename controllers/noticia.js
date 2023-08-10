@@ -7,7 +7,7 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 const Noticia = require('../models/noticia');
 const Order = require('../models/order');
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 3;
 
 exports.getNoticias = (req, res, next) => {
   const page = +req.query.page || 1;
@@ -23,7 +23,7 @@ exports.getNoticias = (req, res, next) => {
     })
     .then(noticias => {
       res.render('noticia/noticia-list', {
-        prods: noticias,
+        noticias,
         pageTitle: 'Noticias',
         path: '/noticias',
         currentPage: page,
@@ -72,7 +72,7 @@ exports.getIndex = (req, res, next) => {
     })
     .then(noticias => {
       res.render('noticia/index', {
-        prods: noticias,
+        noticias: noticias,
         pageTitle: 'Shop',
         path: '/',
         currentPage: page,

@@ -6,9 +6,9 @@
         <%- include('../includes/navigation.ejs') %>
 
             <main>
-                <% if (prods.length > 0) { %>
+                <% if (noticias.length > 0) { %>
                     <div class="grid">
-                        <% for (let noticia of prods) { %>
+                        <% for (let noticia of noticias) { %>
                             <article class="card noticia-item">
                                 <header class="card__header">
                                     <h1 class="noticia__title">
@@ -21,7 +21,7 @@
                                 <div class="card__content">
                                    
                                     <p class="noticia__description">
-                                        <%= noticia.description %>
+                                        <%= noticia.description.substr(0, 100) %>
                                     </p>
                                 </div>
                                 <div class="card__actions">
