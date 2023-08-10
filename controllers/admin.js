@@ -81,8 +81,8 @@ exports.getEditNoticia = (req, res, next) => {
   if (!editMode) {
     return res.redirect('/');
   }
-  const prodId = req.params.noticiaId;
-  Noticia.findById(prodId)
+  const noticiaId = req.params.noticiaId;
+  Noticia.findById(noticiaId)
     .then(noticia => {
       if (!noticia) {
         return res.redirect('/');
@@ -105,7 +105,7 @@ exports.getEditNoticia = (req, res, next) => {
 };
 
 exports.postEditNoticia = (req, res, next) => {
-  const prodId = req.body.noticiaId;
+  const noticiaId = req.body.noticiaId;
   const updatedTitle = req.body.title;
   const image = req.file;
   const updatedDesc = req.body.description;
@@ -121,14 +121,14 @@ exports.postEditNoticia = (req, res, next) => {
       noticia: {
         title: updatedTitle,
         description: updatedDesc,
-        _id: prodId
+        _id: noticiaId
       },
       errorMessage: errors.array()[0].msg,
       validationErrors: errors.array()
     });
   }
 
-  Noticia.findById(prodId)
+  Noticia.findById(noticiaId)
     .then(noticia => {
       if (noticia.userId.toString() !== req.user._id.toString()) {
         return res.redirect('/');
@@ -140,7 +140,7 @@ exports.postEditNoticia = (req, res, next) => {
         noticia.imageUrl = image.path;
       }
       return noticia.save().then(result => {
-        console.log('UPDATED PRODUCT!');
+        console.log('UPDATED noticiaUCT!');
         res.redirect('/admin/noticias');
       });
     })
@@ -154,9 +154,8 @@ exports.postEditNoticia = (req, res, next) => {
 exports.getNoticias = (req, res, next) => {
   Noticia.find({ userId: req.user._id })
     .then(noticias => {
-      console.log(noticias);
       res.render('admin/noticias', {
-        prods: noticias,
+        noticias,
         pageTitle: 'Admin Noticias',
         path: '/admin/noticias'
       });
@@ -169,17 +168,17 @@ exports.getNoticias = (req, res, next) => {
 };
 
 exports.deleteNoticia = (req, res, next) => {
-  const prodId = req.params.noticiaId;
-  Noticia.findById(prodId)
+  const noticiaId = req.params.noticiaId;
+  Noticia.findById(noticiaId)
     .then(noticia => {
       if (!noticia) {
         return next(new Error('Noticia not found.'));
       }
       fileHelper.deleteFile(noticia.imageUrl);
-      return Noticia.deleteOne({ _id: prodId, userId: req.user._id });
+      return Noticia.deleteOne({ _id: noticiaId, userId: req.user._id });
     })
     .then(() => {
-      console.log('DESTROYED PRODUCT');
+      console.log('DESTROYED noticiaUCT');
       res.status(200).json({ message: 'Success!' });
     })
     .catch(err => {

@@ -19,7 +19,7 @@ const compression = require('compression');
 const morgan = require('morgan');
 
 const errorController = require('./controllers/error');
-const shopController = require('./controllers/shop');
+const noticiaController = require('./controllers/noticia');
 const isAuth = require('./middleware/is-auth');
 const isAdm = require('./middleware/is-adm');
 const User = require('./models/user');
@@ -72,7 +72,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+const noticiaRoutes = require('./routes/noticia');
 const authRoutes = require('./routes/auth');
 
 const accessLogStream = fs.createWriteStream(
@@ -127,7 +127,7 @@ app.use((req, res, next) => {
     });
 });
 
-app.post('/create-order', isAuth, shopController.postOrder);
+app.post('/create-order', isAuth, noticiaController.postOrder);
 
 app.use(csrfProtection);
 app.use((req, res, next) => {
@@ -136,7 +136,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/admin', adminRoutes);
-app.use(shopRoutes);
+app.use(noticiaRoutes);
 app.use(authRoutes);
 
 app.get('/500', errorController.get500);

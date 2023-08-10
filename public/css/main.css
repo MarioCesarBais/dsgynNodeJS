@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700");
 
 * {
   box-sizing: border-box;
@@ -7,7 +7,7 @@
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   background: linear-gradient(135deg, lightgray, whitesmoke);
 }
 
@@ -172,7 +172,8 @@ form {
   align-items: stretch;
 }
 
-.card {
+.card,
+card__image img {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
 
@@ -274,7 +275,9 @@ form {
   color: white;
 }
 
-button:hover, .btn:hover, a:hover {
+button:hover,
+.btn:hover,
+a:hover {
   scale: 150%;
   font-weight: bolder;
   transition: 2s;
@@ -293,4 +296,28 @@ button:hover, .btn:hover, a:hover {
   .user-message {
     width: 30rem;
   }
+}
+
+.card__image img,
+.image img {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 10px;
+  border: 1px solid darkgray;
+}
+
+main.centered {
+  padding: 1rem;
+  margin: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 10px;
+  border: 1px solid darkgray;
+}
+
+#detalhe {
+    padding: 1rem;
+    margin: 1rem;
+    text-align: justify;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    border-radius: 10px;
+    border: 1px solid darkgray;
 }

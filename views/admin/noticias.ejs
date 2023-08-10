@@ -6,9 +6,9 @@
         <%- include('../includes/navigation.ejs') %>
 
             <main>
-                <% if (prods.length > 0) { %>
+                <% if (noticias.length > 0) { %>
                     <div class="grid">
-                        <% for (let noticia of prods) { %>
+                        <% for (let noticia of noticias) { %>
                             <article class="card noticia-item">
                                 <header class="card__header">
                                     <h1 class="noticia__title">
@@ -21,11 +21,19 @@
                                 <div class="card__content">
                                     
                                     <p class="noticia__description">
-                                        <%= noticia.description %>
+                                        <%= noticia.description.substr(0, 100) %>
+                                        <span><a href="/noticias/<%= noticia._id %>" class="btn">... Leia Mais</a></span>
                                     </p>
                                 </div>
                                 <div class="card__actions">
-                                    <a href="/admin/edit-noticia/<%= noticia._id %>?edit=true" class="btn">Edit</a>
+                                    
+                                    <div class="card__actions">
+                                        <a href="/admin/edit-noticia/<%= noticia._id %>?edit=true" class="btn">Edit</a>
+                                        <a href="/noticias/<%= noticia._id %>" class="btn">Details</a>
+                                        <% if (isAuthenticated) { %>
+                                            <%- include('../includes/add-to-cart.ejs', {noticia}) %>
+                                        <% } %>
+                                    </div>
                                     <input type="hidden" value="<%= noticia._id %>" name="noticiaId">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <button class="btn" type="button" onclick="deleteNoticia(this)">Delete</button>

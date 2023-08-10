@@ -9,7 +9,7 @@
             <div class="image">
                 <img src="<%= noticia.imageUrl %>" alt="<%= noticia.title %>">
             </div>
-            <p><%= noticia.description %></p>
+            <p id="detalhe"><%= noticia.description %></p>
             <% if (isAuthenticated) { %>
                 <%- include('../includes/add-to-cart.ejs', {noticia: noticia}) %>
             <% } %>

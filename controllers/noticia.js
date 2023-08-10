@@ -22,7 +22,7 @@ exports.getNoticias = (req, res, next) => {
         .limit(ITEMS_PER_PAGE);
     })
     .then(noticias => {
-      res.render('shop/noticia-list', {
+      res.render('noticia/noticia-list', {
         prods: noticias,
         pageTitle: 'Noticias',
         path: '/noticias',
@@ -45,7 +45,7 @@ exports.getNoticia = (req, res, next) => {
   const prodId = req.params.noticiaId;
   Noticia.findById(prodId)
     .then(noticia => {
-      res.render('shop/noticia-detail', {
+      res.render('noticia/noticia-detail', {
         noticia: noticia,
         pageTitle: noticia.title,
         path: '/noticias'
@@ -71,7 +71,7 @@ exports.getIndex = (req, res, next) => {
         .limit(ITEMS_PER_PAGE);
     })
     .then(noticias => {
-      res.render('shop/index', {
+      res.render('noticia/index', {
         prods: noticias,
         pageTitle: 'Shop',
         path: '/',
@@ -96,7 +96,7 @@ exports.getCart = (req, res, next) => {
     .execPopulate()
     .then(user => {
       const noticias = user.cart.items;
-      res.render('shop/cart', {
+      res.render('noticia/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
         noticias: noticias
@@ -150,7 +150,7 @@ exports.getCheckout = (req, res, next) => {
       noticias.forEach(p => {
         total += p.quantity * p.noticiaId.price;
       });
-      res.render('shop/checkout', {
+      res.render('noticia/checkout', {
         path: '/checkout',
         pageTitle: 'Checkout',
         noticias: noticias,
@@ -213,7 +213,7 @@ exports.postOrder = (req, res, next) => {
 exports.getOrders = (req, res, next) => {
   Order.find({ 'user.userId': req.user._id })
     .then(orders => {
-      res.render('shop/orders', {
+      res.render('noticia/orders', {
         path: '/orders',
         pageTitle: 'Your Orders',
         orders: orders
