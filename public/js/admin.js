@@ -1,10 +1,10 @@
-const deleteProduct = btn => {
-  const prodId = btn.parentNode.querySelector('[name=productId]').value;
+const deleteNoticia = btn => {
+  const prodId = btn.parentNode.querySelector('[name=noticiaId]').value;
   const csrf = btn.parentNode.querySelector('[name=_csrf]').value;
 
-  const productElement = btn.closest('article');
+  const noticiaElement = btn.closest('article');
 
-  fetch('/admin/product/' + prodId, {
+  fetch('/admin/noticia/' + prodId, {
     method: 'DELETE',
     headers: {
       'csrf-token': csrf
@@ -15,7 +15,7 @@ const deleteProduct = btn => {
     })
     .then(data => {
       console.log(data);
-      productElement.parentNode.removeChild(productElement);
+      noticiaElement.parentNode.removeChild(noticiaElement);
     })
     .catch(err => {
       console.log(err);

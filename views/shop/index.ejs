@@ -1,5 +1,5 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/noticia.css">
 </head>
 
 <body>
@@ -8,23 +8,22 @@
     <main>
         <% if (prods.length > 0) { %>
             <div class="grid">
-                <% for (let product of prods) { %>
-                    <article class="card product-item">
+                <% for (let noticia of prods) { %>
+                    <article class="card noticia-item">
                         <header class="card__header">
-                            <h1 class="product__title"><%= product.title %></h1>
+                            <h1 class="noticia__title"><%= noticia.title %></h1>
                         </header>
                         <div class="card__image">
-                            <img src="<%= product.imageUrl %>"
-                                alt="<%= product.title %>">
+                            <img src="<%= noticia.imageUrl %>"
+                                alt="<%= noticia.title %>">
                         </div>
                         <div class="card__content">
-                            <h2 class="product__price">$<%= product.price %></h2>
-                            <p class="product__description"><%= product.description %></p>
+                            <p class="noticia__description"><%= noticia.description %></p>
                         </div>
                         <div class="card__actions">
-                            <a href="/products/<%= product._id %>" class="btn">Details</a>
+                            <a href="/noticias/<%= noticia._id %>" class="btn">Details</a>
                             <% if (isAuthenticated) { %>
-                                <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+                                <%- include('../includes/add-to-cart.ejs', {noticia: noticia}) %>
                             <% } %>
                         </div>
                     </article>
@@ -32,7 +31,7 @@
             </div>
             <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
         <% } else { %>
-            <h1>No Products Found!</h1>
+            <h1>No Noticias Found!</h1>
         <% } %>
     </main>
 <%- include('../includes/end.ejs') %>

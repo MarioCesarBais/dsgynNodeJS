@@ -8,47 +8,46 @@ const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
-// /admin/add-product => GET
-router.get('/add-product', isAuth, adminController.getAddProduct);
+// /admin/add-noticia => GET
+router.get('/add-noticia', isAuth, adminController.getAddNoticia);
 
-// /admin/products => GET
-router.get('/products', isAuth, adminController.getProducts);
+// /admin/noticias => GET
+router.get('/noticias', isAuth, adminController.getNoticias);
 
-// /admin/add-product => POST
+// /admin/add-noticia => POST
 router.post(
-  '/add-product',
+  '/add-noticia',
   [
     body('title')
       .isString()
       .isLength({ min: 3 })
       .trim(),
-    body('price').isFloat(),
     body('description')
       .isLength({ min: 5, max: 400 })
       .trim()
   ],
   isAuth,
-  adminController.postAddProduct
+  adminController.postAddNoticia
 );
 
-router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
+router.get('/edit-noticia/:noticiaId', isAuth, adminController.getEditNoticia);
 
 router.post(
-  '/edit-product',
+  '/edit-noticia',
   [
     body('title')
       .isString()
       .isLength({ min: 3 })
       .trim(),
-    body('price').isFloat(),
+
     body('description')
       .isLength({ min: 5, max: 400 })
       .trim()
   ],
   isAuth,
-  adminController.postEditProduct
+  adminController.postEditNoticia
 );
 
-router.delete('/product/:productId', isAuth, adminController.deleteProduct);
+router.delete('/noticia/:noticiaId', isAuth, adminController.deleteNoticia);
 
 module.exports = router;

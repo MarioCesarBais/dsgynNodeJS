@@ -104,6 +104,7 @@ app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.isAdm = (req.session.user && req.session.user.role === 'adm')
   next();
 });
 

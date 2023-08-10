@@ -4,28 +4,28 @@ const path = require('path');
 const PDFDocument = require('pdfkit');
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 
-const Product = require('../models/product');
+const Noticia = require('../models/noticia');
 const Order = require('../models/order');
 
 const ITEMS_PER_PAGE = 2;
 
-exports.getProducts = (req, res, next) => {
+exports.getNoticias = (req, res, next) => {
   const page = +req.query.page || 1;
   let totalItems;
 
-  Product.find()
+  Noticia.find()
     .countDocuments()
-    .then(numProducts => {
-      totalItems = numProducts;
-      return Product.find()
+    .then(numNoticias => {
+      totalItems = numNoticias;
+      return Noticia.find()
         .skip((page - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE);
     })
-    .then(products => {
-      res.render('shop/product-list', {
-        prods: products,
-        pageTitle: 'Products',
-        path: '/products',
+    .then(noticias => {
+      res.render('shop/noticia-list', {
+        prods: noticias,
+        pageTitle: 'Noticias',
+        path: '/noticias',
         currentPage: page,
         hasNextPage: ITEMS_PER_PAGE * page < totalItems,
         hasPreviousPage: page > 1,
@@ -41,14 +41,14 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
-exports.getProduct = (req, res, next) => {
-  const prodId = req.params.productId;
-  Product.findById(prodId)
-    .then(product => {
-      res.render('shop/product-detail', {
-        product: product,
-        pageTitle: product.title,
-        path: '/products'
+exports.getNoticia = (req, res, next) => {
+  const prodId = req.params.noticiaId;
+  Noticia.findById(prodId)
+    .then(noticia => {
+      res.render('shop/noticia-detail', {
+        noticia: noticia,
+        pageTitle: noticia.title,
+        path: '/noticias'
       });
     })
     .catch(err => {
@@ -62,17 +62,17 @@ exports.getIndex = (req, res, next) => {
   const page = +req.query.page || 1;
   let totalItems;
 
-  Product.find()
+  Noticia.find()
     .countDocuments()
-    .then(numProducts => {
-      totalItems = numProducts;
-      return Product.find()
+    .then(numNoticias => {
+      totalItems = numNoticias;
+      return Noticia.find()
         .skip((page - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE);
     })
-    .then(products => {
+    .then(noticias => {
       res.render('shop/index', {
-        prods: products,
+        prods: noticias,
         pageTitle: 'Shop',
         path: '/',
         currentPage: page,
@@ -92,14 +92,14 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   req.user
-    .populate('cart.items.productId')
+    .populate('cart.items.noticiaId')
     .execPopulate()
     .then(user => {
-      const products = user.cart.items;
+      const noticias = user.cart.items;
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
-        products: products
+        noticias: noticias
       });
     })
     .catch(err => {
@@ -110,10 +110,10 @@ exports.getCart = (req, res, next) => {
 };
 
 exports.postCart = (req, res, next) => {
-  const prodId = req.body.productId;
-  Product.findById(prodId)
-    .then(product => {
-      return req.user.addToCart(product);
+  const prodId = req.body.noticiaId;
+  Noticia.findById(prodId)
+    .then(noticia => {
+      return req.user.addToCart(noticia);
     })
     .then(result => {
       console.log(result);
@@ -126,8 +126,8 @@ exports.postCart = (req, res, next) => {
     });
 };
 
-exports.postCartDeleteProduct = (req, res, next) => {
-  const prodId = req.body.productId;
+exports.postCartDeleteNoticia = (req, res, next) => {
+  const prodId = req.body.noticiaId;
   req.user
     .removeFromCart(prodId)
     .then(result => {
@@ -142,18 +142,18 @@ exports.postCartDeleteProduct = (req, res, next) => {
 
 exports.getCheckout = (req, res, next) => {
   req.user
-    .populate('cart.items.productId')
+    .populate('cart.items.noticiaId')
     .execPopulate()
     .then(user => {
-      const products = user.cart.items;
+      const noticias = user.cart.items;
       let total = 0;
-      products.forEach(p => {
-        total += p.quantity * p.productId.price;
+      noticias.forEach(p => {
+        total += p.quantity * p.noticiaId.price;
       });
       res.render('shop/checkout', {
         path: '/checkout',
         pageTitle: 'Checkout',
-        products: products,
+        noticias: noticias,
         totalSum: total
       });
     })
@@ -171,22 +171,22 @@ exports.postOrder = (req, res, next) => {
   let totalSum = 0;
 
   req.user
-    .populate('cart.items.productId')
+    .populate('cart.items.noticiaId')
     .execPopulate()
     .then(user => {  
       user.cart.items.forEach(p => {
-        totalSum += p.quantity * p.productId.price;
+        totalSum += p.quantity * p.noticiaId.price;
       });
 
-      const products = user.cart.items.map(i => {
-        return { quantity: i.quantity, product: { ...i.productId._doc } };
+      const noticias = user.cart.items.map(i => {
+        return { quantity: i.quantity, noticia: { ...i.noticiaId._doc } };
       });
       const order = new Order({
         user: {
           email: req.user.email,
           userId: req.user
         },
-        products: products
+        noticias: noticias
       });
       return order.save();
     })
@@ -253,17 +253,17 @@ exports.getInvoice = (req, res, next) => {
       });
       pdfDoc.text('-----------------------');
       let totalPrice = 0;
-      order.products.forEach(prod => {
-        totalPrice += prod.quantity * prod.product.price;
+      order.noticias.forEach(prod => {
+        totalPrice += prod.quantity * prod.noticia.price;
         pdfDoc
           .fontSize(14)
           .text(
-            prod.product.title +
+            prod.noticia.title +
               ' - ' +
               prod.quantity +
               ' x ' +
               '$' +
-              prod.product.price
+              prod.noticia.price
           );
       });
       pdfDoc.text('---');

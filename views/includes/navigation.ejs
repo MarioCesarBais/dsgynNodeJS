@@ -5,10 +5,10 @@
     <nav class="main-header__nav">
         <ul class="main-header__item-list">
             <li class="main-header__item">
-                <a class="<%= path === '/' ? 'active' : '' %>" href="/">Shop</a>
+                <a class="<%= path === '/' ? 'active' : '' %>" href="/">Notícias</a>
             </li>
             <li class="main-header__item">
-                <a class="<%= path === '/products' ? 'active' : '' %>" href="/products">Products</a>
+                <a class="<%= path === '/noticias' ? 'active' : '' %>" href="/noticias">Noticias</a>
             </li>
             <% if (isAuthenticated) { %>
                 <li class="main-header__item">
@@ -17,14 +17,18 @@
                 <li class="main-header__item">
                     <a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders">Orders</a>
                 </li>
+
+                <% if (isAdm) { %>
                 <li class="main-header__item">
-                    <a class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">Add Product
+                    <a class="<%= path === '/admin/add-noticia' ? 'active' : '' %>" href="/admin/add-noticia">Add Noticia
                     </a>
                 </li>
                 <li class="main-header__item">
-                    <a class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">Admin Products
+                    <a class="<%= path === '/admin/noticias' ? 'active' : '' %>" href="/admin/noticias">Admin Noticias
                     </a>
                 </li>
+                <% } %>
+
             <% } %>
         </ul>
         <ul class="main-header__item-list">
@@ -53,7 +57,7 @@
             <a class="<%= path === '/' ? 'active' : '' %>" href="/">Shop</a>
         </li>
         <li class="mobile-nav__item">
-            <a class="<%= path === '/products' ? 'active' : '' %>" href="/products">Products</a>
+            <a class="<%= path === '/noticias' ? 'active' : '' %>" href="/noticias">Noticias</a>
         </li>
         <% if (isAuthenticated) { %>
             <li class="mobile-nav__item">
@@ -63,11 +67,11 @@
                 <a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders">Orders</a>
             </li>
             <li class="mobile-nav__item">
-                <a class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">Add Product
+                <a class="<%= path === '/admin/add-noticia' ? 'active' : '' %>" href="/admin/add-noticia">Add Noticia
                 </a>
             </li>
             <li class="mobile-nav__item">
-                <a class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">Admin Products
+                <a class="<%= path === '/admin/noticias' ? 'active' : '' %>" href="/admin/noticias">Admin Noticias
                 </a>
             </li>
         <% } %>

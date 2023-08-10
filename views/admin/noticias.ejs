@@ -19,23 +19,23 @@
                                     <img src="<%= noticia.imageUrl %>" alt="<%= noticia.title %>">
                                 </div>
                                 <div class="card__content">
-                                   
+                                    
                                     <p class="noticia__description">
                                         <%= noticia.description %>
                                     </p>
                                 </div>
                                 <div class="card__actions">
-                                    <a href="/noticias/<%= noticia._id %>" class="btn">Details</a>
-                                    <% if (isAuthenticated) { %>
-                                        <%- include('../includes/add-to-cart.ejs', {noticia: noticia}) %>
-                                    <% } %>
+                                    <a href="/admin/edit-noticia/<%= noticia._id %>?edit=true" class="btn">Edit</a>
+                                    <input type="hidden" value="<%= noticia._id %>" name="noticiaId">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button class="btn" type="button" onclick="deleteNoticia(this)">Delete</button>
                                 </div>
                             </article>
                             <% } %>
                     </div>
-                    <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
                     <% } else { %>
                         <h1>No Noticias Found!</h1>
                         <% } %>
             </main>
             <%- include('../includes/end.ejs') %>
+            <script src="/js/admin.js"></script>

@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
-  products: [
+  noticias: [
     {
-      product: { type: Object, required: true },
+      noticia: { type: Object, required: true },
       quantity: { type: Number, required: true }
     }
   ],
