@@ -19,9 +19,9 @@ const compression = require('compression');
 const morgan = require('morgan');
 
 const errorController = require('./controllers/error');
-const noticiaController = require('./controllers/noticia');
-const isAuth = require('./middleware/is-auth');
-const isAdm = require('./middleware/is-adm');
+// const noticiaController = require('./controllers/noticia');
+// const isAuth = require('./middleware/is-auth');
+// const isAdm = require('./middleware/is-adm');
 const User = require('./models/user');
 
 // Use as variáveis de ambiente conforme necessário no seu código
@@ -127,8 +127,6 @@ app.use((req, res, next) => {
     });
 });
 
-app.post('/create-order', isAuth, noticiaController.postOrder);
-
 app.use(csrfProtection);
 app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
@@ -139,9 +137,13 @@ app.use('/admin', adminRoutes);
 app.use(noticiaRoutes);
 app.use(authRoutes);
 
+app.use(errorController.get401);
+
 app.get('/500', errorController.get500);
 
 app.use(errorController.get404);
+
+
 
 app.use((error, req, res, next) => {
   console.log(error)
