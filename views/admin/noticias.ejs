@@ -30,9 +30,6 @@
                                     <div class="card__actions">
                                         <a href="/admin/edit-noticia/<%= noticia._id %>?edit=true" class="btn">Edit</a>
                                         <a href="/noticias/<%= noticia._id %>" class="btn">Details</a>
-                                        <% if (isAuthenticated) { %>
-                                            <%- include('../includes/add-to-cart.ejs', {noticia}) %>
-                                        <% } %>
                                     </div>
                                     <input type="hidden" value="<%= noticia._id %>" name="noticiaId">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
