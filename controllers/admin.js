@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
 const fileHelper = require('../util/file');
 
@@ -56,7 +56,6 @@ exports.postAddNoticia = (req, res, next) => {
   const imageUrl = image.path;
 
   const noticia = new Noticia({
-    // _id: new mongoose.Types.ObjectId('5badf72403fd8b5be0366e81'),
     title,
     description,
     imageUrl,
@@ -65,7 +64,6 @@ exports.postAddNoticia = (req, res, next) => {
   noticia
     .save()
     .then(result => {
-      // console.log(result);
       console.log('Created Noticia');
       res.redirect('/admin/noticias');
     })
