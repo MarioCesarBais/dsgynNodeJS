@@ -146,7 +146,7 @@ app.use(errorController.get404);
 
 
 app.use((error, req, res, next) => {
-  console.log(error)
+  console.log('149 app.js:', error)
   const isAuthenticated = req.session ? req.session.isLoggedIn : false
   res.status(500).render('500', {
     pageTitle: 'Error!',
@@ -166,5 +166,5 @@ mongoose
       console.log(`CONECTADO na porta: ${port}`)
   })
   .catch(err => {
-    console.log(err);
+    console.log('app.js 169:', err);
   });

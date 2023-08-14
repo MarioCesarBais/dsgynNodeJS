@@ -18,6 +18,6 @@ const deleteNoticia = btn => {
       noticiaElement.parentNode.removeChild(noticiaElement);
     })
     .catch(err => {
-      console.log(err);
+      console.log('admin.js 21', err);
     });
 };

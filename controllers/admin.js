@@ -38,7 +38,7 @@ exports.postAddNoticia = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors.array());
+    console.log('admin.js 41:', errors.array());
     return res.status(422).render('admin/edit-noticia', {
       pageTitle: 'Add Noticia',
       path: '/admin/add-noticia',
@@ -65,7 +65,6 @@ exports.postAddNoticia = (req, res, next) => {
   noticia
     .save()
     .then(result => {
-      // console.log(result);
       console.log('Created Noticia');
       res.redirect('/admin/noticias');
     })
