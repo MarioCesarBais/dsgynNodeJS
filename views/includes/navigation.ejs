@@ -7,18 +7,8 @@
             <li class="main-header__item">
                 <a class="<%= path === '/' ? 'active' : '' %>" href="/">Notícias</a>
             </li>
-            <li class="main-header__item">
-                <a class="<%= path === '/noticias' ? 'active' : '' %>" href="/noticias">Noticias</a>
-            </li>
-            <% if (isAuthenticated) { %>
-                <li class="main-header__item">
-                    <a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart">Cart</a>
-                </li>
-                <li class="main-header__item">
-                    <a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders">Orders</a>
-                </li>
+            <% if (isAuthenticated && isAdm) { %>
 
-                <% if (isAdm) { %>
                 <li class="main-header__item">
                     <a class="<%= path === '/admin/add-noticia' ? 'active' : '' %>" href="/admin/add-noticia">Add Noticia
                     </a>
@@ -27,7 +17,6 @@
                     <a class="<%= path === '/admin/noticias' ? 'active' : '' %>" href="/admin/noticias">Admin Noticias
                     </a>
                 </li>
-                <% } %>
 
             <% } %>
         </ul>
@@ -56,16 +45,8 @@
         <li class="mobile-nav__item">
             <a class="<%= path === '/' ? 'active' : '' %>" href="/">Shop</a>
         </li>
-        <li class="mobile-nav__item">
-            <a class="<%= path === '/noticias' ? 'active' : '' %>" href="/noticias">Noticias</a>
-        </li>
-        <% if (isAuthenticated) { %>
-            <li class="mobile-nav__item">
-                <a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart">Cart</a>
-            </li>
-            <li class="mobile-nav__item">
-                <a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders">Orders</a>
-            </li>
+        <% if (isAuthenticated && isAdm) { %>
+
             <li class="mobile-nav__item">
                 <a class="<%= path === '/admin/add-noticia' ? 'active' : '' %>" href="/admin/add-noticia">Add Noticia
                 </a>
