@@ -127,7 +127,7 @@ app.use((req, res, next) => {
     });
 });
 
-app.post('/create-order', isAuth, noticiaController.postOrder);
+// app.post('/create-order', isAuth, noticiaController.postOrder);
 
 app.use(csrfProtection);
 app.use((req, res, next) => {
@@ -138,6 +138,8 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use(noticiaRoutes);
 app.use(authRoutes);
+
+app.use(errorController.get401);
 
 app.get('/500', errorController.get500);
 
