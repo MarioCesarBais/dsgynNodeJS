@@ -44,7 +44,7 @@ exports.getSignup = (req, res, next) => {
   }
   res.render('auth/signup', {
     path: '/signup',
-    pageTitle: 'Signup',
+    pageTitle: 'Inscrever-se',
     errorMessage: message,
     oldInput: {
       email: '',
@@ -79,7 +79,7 @@ exports.postLogin = (req, res, next) => {
         return res.status(422).render('auth/login', {
           path: '/login',
           pageTitle: 'Login',
-          errorMessage: 'Invalid email or password.',
+          errorMessage: 'Inválido email ou senha.',
           oldInput: {
             email: email,
             password: password
@@ -101,7 +101,7 @@ exports.postLogin = (req, res, next) => {
           return res.status(422).render('auth/login', {
             path: '/login',
             pageTitle: 'Login',
-            errorMessage: 'Invalid email or password.',
+            errorMessage: 'Inválido email ou senha.',
             oldInput: {
               email: email,
               password: password
@@ -131,7 +131,7 @@ exports.postSignup = (req, res, next) => {
     console.log(errors.array());
     return res.status(422).render('auth/signup', {
       path: '/signup',
-      pageTitle: 'Signup',
+      pageTitle: 'Inscrever-se',
       errorMessage: errors.array()[0].msg,
       oldInput: {
         email: email,
@@ -239,7 +239,7 @@ exports.getNewPassword = (req, res, next) => {
       }
       res.render('auth/new-password', {
         path: '/new-password',
-        pageTitle: 'New Password',
+        pageTitle: 'Nova Senha',
         errorMessage: message,
         userId: user._id.toString(),
         passwordToken: token

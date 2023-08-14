@@ -8,7 +8,7 @@ const Noticia = require('../models/noticia');
 
 exports.getAddNoticia = (req, res, next) => {
   res.render('admin/edit-noticia', {
-    pageTitle: 'Add Noticia',
+    pageTitle: '+ Noticia',
     path: '/admin/add-noticia',
     editing: false,
     hasError: false,
@@ -23,7 +23,7 @@ exports.postAddNoticia = (req, res, next) => {
   const description = req.body.description;
   if (!image) {
     return res.status(422).render('admin/edit-noticia', {
-      pageTitle: 'Add Noticia',
+      pageTitle: '+ Noticia',
       path: '/admin/add-noticia',
       editing: false,
       hasError: true,
@@ -40,7 +40,7 @@ exports.postAddNoticia = (req, res, next) => {
   if (!errors.isEmpty()) {
     console.log(errors.array());
     return res.status(422).render('admin/edit-noticia', {
-      pageTitle: 'Add Noticia',
+      pageTitle: '+ Noticia',
       path: '/admin/add-noticia',
       editing: false,
       hasError: true,
@@ -86,7 +86,7 @@ exports.getEditNoticia = (req, res, next) => {
         return res.redirect('/');
       }
       res.render('admin/edit-noticia', {
-        pageTitle: 'Edit Noticia',
+        pageTitle: 'Editar Noticia',
         path: '/admin/edit-noticia',
         editing: editMode,
         noticia: noticia,
@@ -112,7 +112,7 @@ exports.postEditNoticia = (req, res, next) => {
 
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-noticia', {
-      pageTitle: 'Edit Noticia',
+      pageTitle: 'Editar Noticia',
       path: '/admin/edit-noticia',
       editing: true,
       hasError: true,

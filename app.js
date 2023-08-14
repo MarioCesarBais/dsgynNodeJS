@@ -149,7 +149,7 @@ app.use((error, req, res, next) => {
   console.log(error)
   const isAuthenticated = req.session ? req.session.isLoggedIn : false
   res.status(500).render('500', {
-    pageTitle: 'Error!',
+    pageTitle: 'Erro!',
     path: '/500',
     isAuthenticated
   });
