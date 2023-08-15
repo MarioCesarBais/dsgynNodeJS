@@ -1,10 +1,10 @@
 {
-  "name": "nodejs-complete-guide",
+  "name": "ds-goiania",
   "version": "1.0.0",
-  "description": "Complete Node.js Guide",
+  "description": "Sindifisco Nacional - Delegacia Sindical em Goiânia",
   "main": "app.js",
   "engines": {
-    "node": "10.9.0"
+    "node": "^16.15.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,8 +12,8 @@
     "start-server": "node app.js",
     "start:dev": "nodemon app.js"
   },
-  "author": "Maximilian Schwarzmüller",
-  "license": "ISC",
+  "author": "Mario Cesar Bais",
+  "license": "",
   "devDependencies": {
     "nodemon": "^1.18.3"
   },
@@ -28,7 +28,6 @@
     "dotenv": "^16.3.1",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
     "express-validator": "^5.3.0",
     "helmet": "^3.14.0",
@@ -39,10 +38,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "mysql2": "^1.6.1",
     "nodemailer": "^4.6.8",
-    "nodemailer-sendgrid-transport": "^0.2.0",
     "pdfkit": "^0.8.3",
-    "pug": "^2.0.3",
-    "sequelize": "^5.0.0-beta.11",
-    "stripe": "^6.12.1"
+    "sequelize": "^5.0.0-beta.11"
   }
 }
