@@ -1,4 +1,4 @@
-footer {
+footer, .container-with-margins {
     background: linear-gradient(135deg, lightgray, whitesmoke);
     display: flex;
     justify-content: space-around; /* Alterado para space-between */

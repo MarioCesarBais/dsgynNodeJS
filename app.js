@@ -143,6 +143,8 @@ app.get('/500', errorController.get500);
 
 app.use(errorController.get404);
 
+app.use(errorController.get401);
+
 app.use((error, req, res, next) => {
   console.log(error)
   const isAuthenticated = req.session ? req.session.isLoggedIn : false

@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.get('/', noticiaController.getIndex);
 
-router.get('/noticias', noticiaController.getNoticias);
+router.get('/', noticiaController.getNoticias);
 
 router.get('/noticias/:noticiaId', noticiaController.getNoticia);
 

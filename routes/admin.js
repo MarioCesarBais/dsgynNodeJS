@@ -13,7 +13,7 @@ const router = express.Router();
 router.get('/add-noticia', isAuth, isAdm, adminController.getAddNoticia);
 
 // /admin/noticias => GET
-router.get('/noticias', isAuth, isAdm, adminController.getNoticias);
+router.get('/', isAuth, isAdm, adminController.getNoticias);
 
 // /admin/add-noticia => POST
 router.post(

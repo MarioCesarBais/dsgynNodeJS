@@ -25,7 +25,7 @@ exports.getNoticias = (req, res, next) => {
       res.render('noticia/noticia-list', {
         noticias,
         pageTitle: 'Noticias',
-        path: '/noticias',
+        path: '/',
         currentPage: page,
         hasNextPage: ITEMS_PER_PAGE * page < totalItems,
         hasPreviousPage: page > 1,
@@ -48,7 +48,7 @@ exports.getNoticia = (req, res, next) => {
       res.render('noticia/noticia-detail', {
         noticia: noticia,
         pageTitle: noticia.title,
-        path: '/noticias'
+        path: '/'
       });
     })
     .catch(err => {
@@ -73,7 +73,7 @@ exports.getIndex = (req, res, next) => {
     .then(noticias => {
       res.render('noticia/index', {
         noticias: noticias,
-        pageTitle: 'Shop',
+        pageTitle: 'Delegacia Sindical em Goiânia',
         path: '/',
         currentPage: page,
         hasNextPage: ITEMS_PER_PAGE * page < totalItems,
