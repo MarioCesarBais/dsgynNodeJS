@@ -8,7 +8,7 @@ const Noticia = require('../models/noticia');
 
 exports.getAddNoticia = (req, res, next) => {
   res.render('admin/edit-noticia', {
-    pageTitle: 'Add Noticia',
+    pageTitle: 'Adicionar Noticia',
     path: '/admin/add-noticia',
     editing: false,
     hasError: false,
@@ -23,7 +23,7 @@ exports.postAddNoticia = (req, res, next) => {
   const description = req.body.description;
   if (!image) {
     return res.status(422).render('admin/edit-noticia', {
-      pageTitle: 'Add Noticia',
+      pageTitle: 'Adicionar Noticia',
       path: '/admin/add-noticia',
       editing: false,
       hasError: true,
@@ -31,7 +31,7 @@ exports.postAddNoticia = (req, res, next) => {
         title: title,
         description: description
       },
-      errorMessage: 'Attached file is not an image.',
+      errorMessage: 'Arquivo anexado não é imagem!',
       validationErrors: []
     });
   }
@@ -40,7 +40,7 @@ exports.postAddNoticia = (req, res, next) => {
   if (!errors.isEmpty()) {
     console.log(errors.array());
     return res.status(422).render('admin/edit-noticia', {
-      pageTitle: 'Add Noticia',
+      pageTitle: 'Adicionar Noticia',
       path: '/admin/add-noticia',
       editing: false,
       hasError: true,
@@ -66,7 +66,7 @@ exports.postAddNoticia = (req, res, next) => {
     .save()
     .then(result => {
       // console.log(result);
-      console.log('Created Noticia');
+      console.log('Noticia criada com sucesso!');
       res.redirect('/admin/noticias');
     })
     .catch(err => {
@@ -88,7 +88,7 @@ exports.getEditNoticia = (req, res, next) => {
         return res.redirect('/');
       }
       res.render('admin/edit-noticia', {
-        pageTitle: 'Edit Noticia',
+        pageTitle: 'Editar Noticia',
         path: '/admin/edit-noticia',
         editing: editMode,
         noticia: noticia,
@@ -114,7 +114,7 @@ exports.postEditNoticia = (req, res, next) => {
 
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-noticia', {
-      pageTitle: 'Edit Noticia',
+      pageTitle: 'Editar Noticia',
       path: '/admin/edit-noticia',
       editing: true,
       hasError: true,
@@ -140,7 +140,7 @@ exports.postEditNoticia = (req, res, next) => {
         noticia.imageUrl = image.path;
       }
       return noticia.save().then(result => {
-        console.log('UPDATED noticiaUCT!');
+        console.log('Notícia Atualizada com Sucesso!');
         res.redirect('/admin/noticias');
       });
     })
@@ -172,16 +172,16 @@ exports.deleteNoticia = (req, res, next) => {
   Noticia.findById(noticiaId)
     .then(noticia => {
       if (!noticia) {
-        return next(new Error('Noticia not found.'));
+        return next(new Error('Noticia não Encontrada!'));
       }
       fileHelper.deleteFile(noticia.imageUrl);
       return Noticia.deleteOne({ _id: noticiaId, userId: req.user._id });
     })
     .then(() => {
-      console.log('DESTROYED noticiaUCT');
-      res.status(200).json({ message: 'Success!' });
+      console.log('Noticia Excluída com Sucesso!');
+      res.status(200).json({ message: 'Successo!' });
     })
     .catch(err => {
-      res.status(500).json({ message: 'Deleting noticia failed.' });
+      res.status(500).json({ message: 'Exclusão de Noticia falhou!' });
     });
 };

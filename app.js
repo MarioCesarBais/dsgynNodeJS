@@ -127,7 +127,7 @@ app.use((req, res, next) => {
     });
 });
 
-app.post('/create-order', isAuth, noticiaController.postOrder);
+// app.post('/create-order', isAuth, noticiaController.postOrder);
 
 app.use(csrfProtection);
 app.use((req, res, next) => {

@@ -44,7 +44,7 @@ exports.getSignup = (req, res, next) => {
   }
   res.render('auth/signup', {
     path: '/signup',
-    pageTitle: 'Signup',
+    pageTitle: 'Inscrever-se',
     errorMessage: message,
     oldInput: {
       email: '',
@@ -131,7 +131,7 @@ exports.postSignup = (req, res, next) => {
     console.log(errors.array());
     return res.status(422).render('auth/signup', {
       path: '/signup',
-      pageTitle: 'Signup',
+      pageTitle: 'Inscrever-se',
       errorMessage: errors.array()[0].msg,
       oldInput: {
         email: email,
@@ -185,7 +185,7 @@ exports.getReset = (req, res, next) => {
   }
   res.render('auth/reset', {
     path: '/reset',
-    pageTitle: 'Reset Password',
+    pageTitle: 'Resetar Senha',
     errorMessage: message
   });
 };
@@ -239,7 +239,7 @@ exports.getNewPassword = (req, res, next) => {
       }
       res.render('auth/new-password', {
         path: '/new-password',
-        pageTitle: 'New Password',
+        pageTitle: 'Nova Senha',
         errorMessage: message,
         userId: user._id.toString(),
         passwordToken: token
