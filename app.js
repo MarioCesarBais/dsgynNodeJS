@@ -19,10 +19,12 @@ const compression = require('compression');
 const morgan = require('morgan');
 
 const errorController = require('./controllers/error');
-const noticiaController = require('./controllers/noticia');
-const isAuth = require('./middleware/is-auth');
-const isAdm = require('./middleware/is-adm');
+// const noticiaController = require('./controllers/noticia');
+// const isAuth = require('./middleware/is-auth');
+// const isAdm = require('./middleware/is-adm');
 const User = require('./models/user');
+
+const app = express();
 
 // Use as variáveis de ambiente conforme necessário no seu código
 const mongoUser = process.env.MONGO_USER;
@@ -31,7 +33,6 @@ const mongoDefaultDatabase = process.env.MONGO_DEFAULT_DATABASE;
 
 const MONGODB_URI = `mongodb+srv://${mongoUser}:${mongoPassword}@cluster0.fzkflsz.mongodb.net/${mongoDefaultDatabase}?retryWrites=true&w=majority`
 
-const app = express();
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions',
@@ -91,7 +92,7 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/images', express.static(path.join(__dirname, 'images'))); // transferido p/ Cloudinary
+app.use('/images', express.static(path.join(__dirname, 'images'))); // transferido p/ Cloudinary; porém CSS bg usa
 app.use(
   session({
     secret: 'my secret',
