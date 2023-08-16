@@ -28,21 +28,18 @@
                                 <div class="card__actions">
                                     
                                     <div class="card__actions">
-                                        <a href="/admin/edit-noticia/<%= noticia._id %>?edit=true" class="btn">Edit</a>
-                                        <a href="/noticias/<%= noticia._id %>" class="btn">Details</a>
-                                        <% if (isAuthenticated) { %>
-                                            <%- include('../includes/add-to-cart.ejs', {noticia}) %>
-                                        <% } %>
+                                        <a href="/admin/edit-noticia/<%= noticia._id %>?edit=true" class="btn">Editar</a>
+                                        <a href="/noticias/<%= noticia._id %>" class="btn">Detalhes</a>
                                     </div>
                                     <input type="hidden" value="<%= noticia._id %>" name="noticiaId">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                    <button class="btn" type="button" onclick="deleteNoticia(this)">Delete</button>
+                                    <button class="btn" type="button" onclick="deleteNoticia(this)">Excluir</button>
                                 </div>
                             </article>
                             <% } %>
                     </div>
                     <% } else { %>
-                        <h1>No Noticias Found!</h1>
+                        <h1>Nenhuma Notícia Encontrada!</h1>
                         <% } %>
             </main>
             <%- include('../includes/end.ejs') %>

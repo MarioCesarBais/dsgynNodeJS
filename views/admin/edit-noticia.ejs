@@ -12,7 +12,7 @@
         <% } %>
         <form class="noticia-form" action="/admin/<% if (editing) { %>edit-noticia<% } else { %>add-noticia<% } %>" method="POST" enctype="multipart/form-data">
             <div class="form-control">
-                <label for="title">Title</label>
+                <label for="title">Manchete</label>
                 <input 
                     class="<%= validationErrors.find(e => e.param === 'title') ? 'invalid' : '' %>"
                     type="text" 
@@ -21,14 +21,14 @@
                     value="<% if (editing || hasError) { %><%= noticia.title %><% } %>">
             </div>
             <div class="form-control">
-                <label for="image">Image</label>
+                <label for="image">Imagem</label>
                 <input 
                     type="file" 
                     name="image" 
                     id="image" >
             </div>
             <div class="form-control">
-                <label for="description">Description</label>
+                <label for="description">Descrição</label>
                 <textarea 
                     class="<%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"
                     name="description" 
@@ -40,7 +40,7 @@
             <% } %>
 
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <button class="btn" type="submit"><% if (editing) { %>Update Noticia<% } else { %>Add Noticia<% } %></button>
+            <button class="btn" type="submit"><% if (editing) { %>Atualizar Notícia<% } else { %>Adicionar Notícia<% } %></button>
         </form>
     </main>
 <%- include('../includes/end.ejs') %>

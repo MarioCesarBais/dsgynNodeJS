@@ -1,6 +1,7 @@
 .noticia-form {
-  width: 20rem;
-  max-width: 90%;
+  /* width: 20rem;
+  max-width: 90%; */
+  width: 80vw;
   margin: auto;
   display: block;
 }
