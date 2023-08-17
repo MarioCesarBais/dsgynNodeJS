@@ -2,20 +2,20 @@ const crypto = require('crypto');
 
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-const { google } = require('googleapis');
+// const { google } = require('googleapis');
 const { validationResult } = require('express-validator/check');
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-const REDIRECT_URI = process.env.REDIRECT_URI
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN
+// const CLIENT_ID = process.env.CLIENT_ID;
+// const CLIENT_SECRET = process.env.CLIENT_SECRET
+// const REDIRECT_URI = process.env.REDIRECT_URI
+// const REFRESH_TOKEN = process.env.REFRESH_TOKEN
 
 const User = require('../models/user');
 
-const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
-oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+// const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+// oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-const mailOptions = {
+let mailOptions = {
   from: 'Mario Cesar Bais <mariocfbais@gmail.com>',
   to: 'mariocfbais@gmail.com',
   subject: 'Hello from gmail using API!',
@@ -45,8 +45,6 @@ async function sendMail(mailOptionsReceived) {
     return error;
   }
 }
-
-
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
@@ -186,6 +184,10 @@ exports.postSignup = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login');
+      mailOptions[to] = email;
+      mailOptions[subject] = 'Inscrição Concluída com Sucesso!!!';
+      mailOptions[html] = '<h1>Agradecemos sua inscrição! Aproveite nossas ofertas!</h1>'
+      console.log(mailOptions)
       // return transporter.sendMail({
       //   to: email,
       //   from: 'noticia@node-complete.com',
