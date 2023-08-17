@@ -1,21 +1,52 @@
 const crypto = require('crypto');
 
 const bcrypt = require('bcryptjs');
-// const gmail = require('gmail')
 const nodemailer = require('nodemailer');
-// const sendgridTransport = require('nodemailer-sendgrid-transport');
+const { google } = require('googleapis');
 const { validationResult } = require('express-validator/check');
+
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET
+const REDIRECT_URI = process.env.REDIRECT_URI
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN
 
 const User = require('../models/user');
 
-// const transporter = nodemailer.createTransport(
-//   sendgridTransport({
-//     auth: {
-//       api_key:
-//         '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'
-//     }
-//   })
-// );
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+const mailOptions = {
+  from: 'Mario Cesar Bais <mariocfbais@gmail.com>',
+  to: 'mariocfbais@gmail.com',
+  subject: 'Hello from gmail using API!',
+  text: 'Hello from gmail email using API!!!',
+  html: '<h1>Hello from gmail email using API!!!</h1>'
+};
+
+async function sendMail(mailOptionsReceived) {
+  try {
+    const transport = nodemailer.createTransport(
+    {
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: `${process.env.YOUR_CLOUD_NAME}@gmail.com`,
+        pass: process.env.GMAIL_SENHA_APP
+      }
+    }
+    );
+
+    for (e in mailOptionsReceived) { mailOptions[e] = mailOptionsReceived[e] }
+
+    const result = await transport.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
+
+
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
@@ -161,6 +192,17 @@ exports.postSignup = (req, res, next) => {
       //   subject: 'Signup succeeded!',
       //   html: '<h1>You successfully signed up!</h1>'
       // });
+
+      sendMail(mailOptions)
+            .then(result => {
+              console.log('e-Mail sent', result);
+              return result;
+            })
+            .catch(err => {
+              console.log(err.message);
+              return err;
+            });
+
     })
     .catch(err => {
       const error = new Error(err);
@@ -218,6 +260,15 @@ exports.postReset = (req, res, next) => {
             <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
           `
         });
+        sendMail(mailOptions)
+          .then(result => {
+            console.log('e-Mail sent', result);
+            return result;
+          })
+          .catch(err => {
+            console.log(err.message);
+            return err;
+          });
       })
       .catch(err => {
         const error = new Error(err);
