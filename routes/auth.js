@@ -15,9 +15,9 @@ router.post(
   [
     body('email')
       .isEmail()
-      .withMessage('Please enter a valid email address.')
+      .withMessage('Senha e e-mail devem ser válidos!')
       .normalizeEmail(),
-    body('password', 'Password has to be valid.')
+    body('password', 'Senha e e-mail devem ser válidos!')
       .isLength({ min: 5 })
       .isAlphanumeric()
       .trim()
@@ -30,7 +30,7 @@ router.post(
   [
     check('email')
       .isEmail()
-      .withMessage('Please enter a valid email.')
+      .withMessage('or favor digite e-mail válido!')
       .custom((value, { req }) => {
         // if (value === 'test@test.com') {
         //   throw new Error('This email address if forbidden.');
@@ -39,7 +39,7 @@ router.post(
         return User.findOne({ email: value }).then(userDoc => {
           if (userDoc) {
             return Promise.reject(
-              'E-Mail exists already, please pick a different one.'
+              'E-Mail já está inscrito, por favor escolha outro e-mail!'
             );
           }
         });
@@ -47,7 +47,7 @@ router.post(
       .normalizeEmail(),
     body(
       'password',
-      'Please enter a password with only numbers and text and at least 5 characters.'
+      'A senha apenas deve: a) conter no mínimo 5 caracteres; e b) os caracteres somente podem ser alfanuméricos!'
     )
       .isLength({ min: 5 })
       .isAlphanumeric()
@@ -56,7 +56,7 @@ router.post(
       .trim()
       .custom((value, { req }) => {
         if (value !== req.body.password) {
-          throw new Error('Passwords have to match!');
+          throw new Error('Senha e confirmação devem ser as mesmas!');
         }
         return true;
       })

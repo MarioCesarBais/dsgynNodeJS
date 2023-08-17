@@ -2,25 +2,12 @@ const crypto = require('crypto');
 
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-// const { google } = require('googleapis');
 const { validationResult } = require('express-validator/check');
-
-// const CLIENT_ID = process.env.CLIENT_ID;
-// const CLIENT_SECRET = process.env.CLIENT_SECRET
-// const REDIRECT_URI = process.env.REDIRECT_URI
-// const REFRESH_TOKEN = process.env.REFRESH_TOKEN
 
 const User = require('../models/user');
 
-// const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
-// oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
-
 let mailOptions = {
-  from: 'Mario Cesar Bais <mariocfbais@gmail.com>',
-  to: 'mariocfbais@gmail.com',
-  subject: 'Hello from gmail using API!',
-  text: 'Hello from gmail email using API!!!',
-  html: '<h1>Hello from gmail email using API!!!</h1>'
+  from: 'Mario Cesar Bais <mariocfbais@gmail.com>'
 };
 
 async function sendMail(mailOptionsReceived) {
@@ -109,7 +96,7 @@ exports.postLogin = (req, res, next) => {
         return res.status(422).render('auth/login', {
           path: '/login',
           pageTitle: 'Login',
-          errorMessage: 'Invalid email or password.',
+          errorMessage: 'E-mail ou Senha inválidos!',
           oldInput: {
             email: email,
             password: password
@@ -131,7 +118,7 @@ exports.postLogin = (req, res, next) => {
           return res.status(422).render('auth/login', {
             path: '/login',
             pageTitle: 'Login',
-            errorMessage: 'Invalid email or password.',
+            errorMessage: 'E-mail ou Senha inválidos!',
             oldInput: {
               email: email,
               password: password
@@ -184,16 +171,10 @@ exports.postSignup = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login');
-      mailOptions[to] = email;
-      mailOptions[subject] = 'Inscrição Concluída com Sucesso!!!';
-      mailOptions[html] = '<h1>Agradecemos sua inscrição! Aproveite nossas ofertas!</h1>'
+      mailOptions['to'] = email;
+      mailOptions['subject'] = 'Inscrição Concluída com Sucesso!!!';
+      mailOptions['html'] = '<h1>Agradecemos sua inscrição! Aproveite nossas ofertas!</h1>'
       console.log(mailOptions)
-      // return transporter.sendMail({
-      //   to: email,
-      //   from: 'noticia@node-complete.com',
-      //   subject: 'Signup succeeded!',
-      //   html: '<h1>You successfully signed up!</h1>'
-      // });
 
       sendMail(mailOptions)
             .then(result => {
