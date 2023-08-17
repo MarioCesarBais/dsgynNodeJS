@@ -54,7 +54,6 @@ exports.postAddNoticia = (req, res, next) => {
   const imageUrl = image.path;
 
   const noticia = new Noticia({
-    // _id: new mongoose.Types.ObjectId('5badf72403fd8b5be0366e81'),
     title,
     description,
     imageUrl,

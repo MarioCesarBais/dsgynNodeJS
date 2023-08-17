@@ -17,7 +17,11 @@ const userSchema = new Schema({
     default: 'filiado' // Valor padrão
   },
   resetToken: String,
-  resetTokenExpiration: Date
+  resetTokenExpiration: Date,
+  confirmationToken: {
+    type: String,
+    default: () => crypto.randomBytes(32).toString('hex')
+  }
 });
 
 module.exports = mongoose.model('User', userSchema);

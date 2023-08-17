@@ -165,15 +165,17 @@ exports.postSignup = (req, res, next) => {
       const user = new User({
         email,
         password: hashedPassword,
-        role
+        role,
+        confirmationToken: crypto.randomBytes(32).toString('hex') // Adiciona o token de confirmação
       });
       return user.save();
     })
     .then(result => {
       res.redirect('/login');
+      const confirmLink = `http://localhost:3000/confirm/${result.confirmationToken}`;
       mailOptions['to'] = email;
       mailOptions['subject'] = 'Inscrição Concluída com Sucesso!!!';
-      mailOptions['html'] = '<h1>Agradecemos sua inscrição! Aproveite nossas ofertas!</h1>'
+      mailOptions['html'] = `<h1>Agradecemos o contato! Clicar no link para confirmar a inscrição: ${confirmLink}</h1>`
       console.log(mailOptions)
 
       sendMail(mailOptions)
@@ -234,15 +236,12 @@ exports.postReset = (req, res, next) => {
       })
       .then(result => {
         res.redirect('/');
-        transporter.sendMail({
-          to: req.body.email,
-          from: 'noticia@node-complete.com',
-          subject: 'Password reset',
-          html: `
-            <p>You requested a password reset</p>
-            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
-          `
-        });
+
+        const resetLink = `http://localhost:3000/reset/${token}`;
+        mailOptions['to'] = req.body.email;
+        mailOptions['subject'] = 'Redefinição de senha';
+        mailOptions['html'] = `<p>Você solicitou a redefinição de senha.</p>
+          <p>Clique <a href="${resetLink}">aqui</a> para definir uma nova senha.</p>`;
         sendMail(mailOptions)
           .then(result => {
             console.log('e-Mail sent', result);
