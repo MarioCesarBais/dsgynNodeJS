@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 
 const bcrypt = require('bcryptjs');
+// const gmail = require('gmail')
 const nodemailer = require('nodemailer');
 // const sendgridTransport = require('nodemailer-sendgrid-transport');
 const { validationResult } = require('express-validator/check');
@@ -148,8 +149,7 @@ exports.postSignup = (req, res, next) => {
       const user = new User({
         email,
         password: hashedPassword,
-        role,
-        cart: { items: [] }
+        role
       });
       return user.save();
     })
