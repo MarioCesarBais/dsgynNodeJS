@@ -247,8 +247,8 @@ exports.postReset = (req, res, next) => {
       .then(result => {
         res.redirect('/');
 
-        // const resetLink = `http://localhost:3000/reset/${token}`;
-        const resetLink = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/reset/${confirmationToken}`;
+        const resetLink = `http://localhost:3000/reset/${token}`;
+        // const resetLink = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/reset/${token}`;
 
         mailOptions['to'] = req.body.email;
         mailOptions['subject'] = 'Redefinição de senha';
