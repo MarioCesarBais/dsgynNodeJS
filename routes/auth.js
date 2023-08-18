@@ -74,28 +74,28 @@ router.get('/reset/:token', authController.getNewPassword);
 
 router.post('/new-password', authController.postNewPassword);
 
-// router.get('/confirm/:token', authController.confirmSignUp)
+router.get('/confirm/:token', authController.confirmSignUp)
 
-router.get('/confirm/:token', (req, res, next) => {
-  const token = req.params.token;
+// router.get('/confirm/:token', (req, res, next) => {
+//   const token = req.params.token;
 
-  User.findOneAndUpdate(
-    { confirmationToken: token },
-    { $set: { confirmationToken: null } } // Remove o token de confirmação
-  )
-    .then(user => {
-      if (!user) {
-        console.log('Erro na atualização do token: expirado ou inválido!')
-      }
+//   User.findOneAndUpdate(
+//     { confirmationToken: token },
+//     { $set: { confirmationToken: null } } // Remove o token de confirmação
+//   )
+//     .then(user => {
+//       if (!user) {
+//         console.log('Erro na atualização do token: expirado ou inválido!')
+//       }
 
-      // Redirecione ou renderize uma página de confirmação bem-sucedida
-    res.redirect('/login');
-    })
-    .catch(err => {
-      // Trate erros
-      console.log('Erro na confirmação de inscrição:', err)
-    });
-});
+//       // Redirecione ou renderize uma página de confirmação bem-sucedida
+//     res.redirect('/login');
+//     })
+//     .catch(err => {
+//       // Trate erros
+//       console.log('Erro na confirmação de inscrição:', err)
+//     });
+// });
 
 
 module.exports = router;

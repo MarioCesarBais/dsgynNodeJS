@@ -13,18 +13,18 @@ let mailOptions = {
 async function sendMail(mailOptionsReceived) {
   try {
     const transport = nodemailer.createTransport(
-    {
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: `${process.env.YOUR_CLOUD_NAME}@gmail.com`,
-        pass: process.env.GMAIL_SENHA_APP
+      {
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: `${process.env.YOUR_CLOUD_NAME}@gmail.com`,
+          pass: process.env.GMAIL_SENHA_APP
+        }
       }
-    }
     );
 
-    for (e in mailOptionsReceived) { mailOptions[e] = mailOptionsReceived[e] }
+    for (e in mailOptionsReceived) { mailOptions[e] = mailOptionsReceived[e]; }
 
     const result = await transport.sendMail(mailOptions);
     return result;
@@ -104,6 +104,16 @@ exports.postLogin = (req, res, next) => {
           validationErrors: []
         });
       }
+
+      if (user.confirmationToken) {
+        const message = "Inscrição ainda não confirmada! Favor clicar no link recebido via e-mail!"
+        return res.render('auth/confirm-signup', {
+          path: '/confirm-signup',
+          pageTitle: 'Inscrição',
+          errorMessage: message
+        })
+      }
+
       bcrypt
         .compare(password, user.password)
         .then(doMatch => {
@@ -174,19 +184,19 @@ exports.postSignup = (req, res, next) => {
       res.redirect('/login');
       const confirmLink = `http://localhost:3000/confirm/${result.confirmationToken}`;
       mailOptions['to'] = email;
-      mailOptions['subject'] = 'Inscrição Concluída com Sucesso!!!';
-      mailOptions['html'] = `<h1>Agradecemos o contato! Clicar no link para confirmar a inscrição: ${confirmLink}</h1>`
-      console.log(mailOptions)
+      mailOptions['subject'] = 'DS/Goiânia - Inscrição a Confirmar';
+      mailOptions['html'] = `<h1>Agradecemos o contato! Clicar no link para confirmar a inscrição: ${confirmLink}</h1>`;
+      console.log(mailOptions);
 
       sendMail(mailOptions)
-            .then(result => {
-              console.log('e-Mail sent', result);
-              return result;
-            })
-            .catch(err => {
-              console.log(err.message);
-              return err;
-            });
+        .then(result => {
+          console.log('e-Mail sent', result);
+          return result;
+        })
+        .catch(err => {
+          console.log(err.message);
+          return err;
+        });
 
     })
     .catch(err => {
@@ -313,5 +323,30 @@ exports.postNewPassword = (req, res, next) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
+    });
+};
+
+exports.confirmSignUp = (req, res, next) => {
+  const token = req.params.token;
+  User.findOneAndUpdate(
+    { confirmationToken: token },
+    { $set: { confirmationToken: null } } // Remove o token de confirmação
+  )
+    .then(user => {
+      let message
+      if (!user) {
+        const err = 'Erro na atualização do token: expirado ou inválido!'
+        console.log(err);
+        message = err;
+      } else { message = null }
+      // Redirecione ou renderize uma página de confirmação bem-sucedida
+      res.render('auth/confirm-signup', {
+        path: '/confirm-signup',
+        pageTitle: 'Inscrição',
+        errorMessage: message
+      })})
+    .catch(err => {
+      // Trate erros
+      console.log('Erro na confirmação de inscrição:', err);
     });
 };
