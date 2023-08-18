@@ -10,10 +10,6 @@ let mailOptions = {
   from: 'Mario Cesar Bais <mariocfbais@gmail.com>'
 };
 
-// Make Mongoose use `findOneAndUpdate()`. Note that this option is `true`
-// by default, you need to set it to false.
-mongoose.set('useFindAndModify', false);
-
 async function sendMail(mailOptionsReceived) {
   try {
     const transport = nodemailer.createTransport(
@@ -186,15 +182,15 @@ exports.postSignup = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login');
-      const confirmLink = `http://localhost:3000/confirm/${result.confirmationToken}`;
+      // const confirmLink = `http://localhost:3000/confirm/${result.confirmationToken}`;
+      const confirmLink = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/confirm/${result.confirmationToken}`;
       mailOptions['to'] = email;
       mailOptions['subject'] = 'DS/Goiânia - Inscrição a Confirmar';
       mailOptions['html'] = `<h1>Agradecemos o contato! Clicar no link para confirmar a inscrição: ${confirmLink}</h1>`;
-      console.log(mailOptions);
 
       sendMail(mailOptions)
         .then(result => {
-          console.log('e-Mail sent', result);
+          console.log('e-Mail sent');
           return result;
         })
         .catch(err => {
@@ -241,7 +237,7 @@ exports.postReset = (req, res, next) => {
     User.findOne({ email: req.body.email })
       .then(user => {
         if (!user) {
-          req.flash('error', 'No account with that email found.');
+          req.flash('error', 'Nenhuma conta encontrada com aquele e-mail!');
           return res.redirect('/reset');
         }
         user.resetToken = token;
@@ -251,14 +247,16 @@ exports.postReset = (req, res, next) => {
       .then(result => {
         res.redirect('/');
 
-        const resetLink = `http://localhost:3000/reset/${token}`;
+        // const resetLink = `http://localhost:3000/reset/${token}`;
+        const resetLink = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/reset/${confirmationToken}`;
+
         mailOptions['to'] = req.body.email;
         mailOptions['subject'] = 'Redefinição de senha';
         mailOptions['html'] = `<p>Você solicitou a redefinição de senha.</p>
           <p>Clique <a href="${resetLink}">aqui</a> para definir uma nova senha.</p>`;
         sendMail(mailOptions)
           .then(result => {
-            console.log('e-Mail sent', result);
+            console.log('e-Mail sent');
             return result;
           })
           .catch(err => {
