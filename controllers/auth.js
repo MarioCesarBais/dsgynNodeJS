@@ -10,6 +10,10 @@ let mailOptions = {
   from: 'Mario Cesar Bais <mariocfbais@gmail.com>'
 };
 
+// Make Mongoose use `findOneAndUpdate()`. Note that this option is `true`
+// by default, you need to set it to false.
+mongoose.set('useFindAndModify', false);
+
 async function sendMail(mailOptionsReceived) {
   try {
     const transport = nodemailer.createTransport(
