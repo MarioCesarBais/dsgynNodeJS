@@ -245,6 +245,7 @@ exports.postReset = (req, res, next) => {
         return user.save();
       })
       .then(result => {
+        if (result) {
         res.redirect('/');
 
         // const resetLink = `http://localhost:3000/reset/${token}`;
@@ -262,7 +263,7 @@ exports.postReset = (req, res, next) => {
           .catch(err => {
             console.log(err.message);
             return err;
-          });
+          });}
       })
       .catch(err => {
         console.log(err)
