@@ -6,6 +6,9 @@ const { validationResult } = require('express-validator/check');
 
 const User = require('../models/user');
 
+const herokuAppName = process.env.HEROKU_APP_NAME;
+console.log(herokuAppName)
+
 let mailOptions = {
   from: 'Mario Cesar Bais <mariocfbais@gmail.com>'
 };
@@ -183,7 +186,8 @@ exports.postSignup = (req, res, next) => {
     .then(result => {
       res.redirect('/login');
       // const confirmLink = `http://localhost:3000/confirm/${result.confirmationToken}`;
-      const confirmLink = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/confirm/${result.confirmationToken}`;
+      // const confirmLink = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/confirm/${result.confirmationToken}`;
+      const resetLink = `https://${herokuAppName}.herokuapp.com/reset/${token}`;
       mailOptions['to'] = email;
       mailOptions['subject'] = 'DS/Goiânia - Inscrição a Confirmar';
       mailOptions['html'] = `<h1>Agradecemos o contato! Clicar no link para confirmar a inscrição: ${confirmLink}</h1>`;
@@ -250,6 +254,7 @@ exports.postReset = (req, res, next) => {
 
         // const resetLink = `http://localhost:3000/reset/${token}`;
         const resetLink = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/reset/${token}`;
+        // const resetLink = `https://${herokuAppName}.herokuapp.com/reset/${token}`;
 
         mailOptions['to'] = req.body.email;
         mailOptions['subject'] = 'Redefinição de senha';
