@@ -10,13 +10,18 @@ footer, .container-with-margins {
     font-size: 1rem;
 }
 
+
+@media (max-width: 688px) {
+    footer {
+        flex-direction: column;
+    }
+}
+
 footer > a {
     display: flex;
     justify-content: space-around;
     align-items: center;
     margin: 1rem;
-    /* font-size: 1.5rem; /* Ajuste o valor conforme necessário */
-    /* height: 3rem; Ajuste o valor conforme necessário */
 }
 
 .heart {
