@@ -7,7 +7,7 @@ const { validationResult } = require('express-validator/check');
 const User = require('../models/user');
 
 const herokuAppName = process.env.HEROKU_APP_NAME;
-console.log(herokuAppName)
+const appUrl = herokuAppName ? "https://${herokuAppName}.herokuapp.com/" : `http://localhost:${process.env.PORT}/`;
 
 let mailOptions = {
   from: 'Mario Cesar Bais <mariocfbais@gmail.com>'
@@ -109,12 +109,12 @@ exports.postLogin = (req, res, next) => {
       }
 
       if (user.confirmationToken) {
-        const message = "Inscrição ainda não confirmada! Favor clicar no link recebido via e-mail!"
+        const message = "Inscrição ainda não confirmada! Favor clicar no link recebido via e-mail!";
         return res.render('auth/confirm-signup', {
           path: '/confirm-signup',
           pageTitle: 'Inscrição',
           errorMessage: message
-        })
+        });
       }
 
       bcrypt
@@ -185,9 +185,7 @@ exports.postSignup = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login');
-      // const confirmLink = `http://localhost:3000/confirm/${result.confirmationToken}`;
-      // const confirmLink = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/confirm/${result.confirmationToken}`;
-      const resetLink = `https://${herokuAppName}.herokuapp.com/reset/${token}`;
+      const confirmLink = `${appUrl}confirm/${result.confirmationToken}`;
       mailOptions['to'] = email;
       mailOptions['subject'] = 'DS/Goiânia - Inscrição a Confirmar';
       mailOptions['html'] = `<h1>Agradecemos o contato! Clicar no link para confirmar a inscrição: ${confirmLink}</h1>`;
@@ -250,28 +248,25 @@ exports.postReset = (req, res, next) => {
       })
       .then(result => {
         if (result) {
-        res.redirect('/');
-
-        // const resetLink = `http://localhost:3000/reset/${token}`;
-        const resetLink = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/reset/${token}`;
-        // const resetLink = `https://${herokuAppName}.herokuapp.com/reset/${token}`;
-
-        mailOptions['to'] = req.body.email;
-        mailOptions['subject'] = 'Redefinição de senha';
-        mailOptions['html'] = `<p>Você solicitou a redefinição de senha.</p>
+          res.redirect('/');
+          const resetLink = `${appUrl}reset/${token}`;
+          mailOptions['to'] = req.body.email;
+          mailOptions['subject'] = 'Redefinição de senha';
+          mailOptions['html'] = `<p>Você solicitou a redefinição de senha.</p>
           <p>Clique <a href="${resetLink}">aqui</a> para definir uma nova senha.</p>`;
-        sendMail(mailOptions)
-          .then(result => {
-            console.log('e-Mail sent');
-            return result;
-          })
-          .catch(err => {
-            console.log(err.message);
-            return err;
-          });}
+          sendMail(mailOptions)
+            .then(result => {
+              console.log('e-Mail sent');
+              return result;
+            })
+            .catch(err => {
+              console.log(err.message);
+              return err;
+            });
+        }
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
         const error = new Error(err);
         error.httpStatusCode = 500;
         return next(error);
@@ -343,18 +338,19 @@ exports.confirmSignUp = (req, res, next) => {
     { $set: { confirmationToken: null } } // Remove o token de confirmação
   )
     .then(user => {
-      let message
+      let message;
       if (!user) {
-        const err = 'Erro na atualização do token: expirado ou inválido!'
+        const err = 'Erro na atualização do token: expirado ou inválido!';
         console.log(err);
         message = err;
-      } else { message = null }
+      } else { message = null; }
       // Redirecione ou renderize uma página de confirmação bem-sucedida
       res.render('auth/confirm-signup', {
         path: '/confirm-signup',
         pageTitle: 'Inscrição',
         errorMessage: message
-      })})
+      });
+    })
     .catch(err => {
       // Trate erros
       console.log('Erro na confirmação de inscrição:', err);
