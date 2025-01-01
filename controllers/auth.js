@@ -1,3 +1,5 @@
+const sgMail = require('@sendgrid/mail');
+
 const crypto = require('crypto');
 
 const bcrypt = require('bcryptjs');
@@ -8,33 +10,68 @@ const User = require('../models/user');
 
 const herokuAppName = process.env.HEROKU_APP_NAME;
 const appUrl = herokuAppName ? "https://${herokuAppName}.herokuapp.com/" : `http://localhost:${process.env.PORT}/`;
+console.log("11", appUrl)
 
 let mailOptions = {
   from: 'Mario Cesar Bais <mariocfbais@gmail.com>'
 };
 
 async function sendMail(mailOptionsReceived) {
-  try {
-    const transport = nodemailer.createTransport(
-      {
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-          user: `${process.env.YOUR_CLOUD_NAME}@gmail.com`,
-          pass: process.env.GMAIL_SENHA_APP
-        }
-      }
-    );
+  // try {
+    // const transport = nodemailer.createTransport(
+    //   {
+    //     host: 'smtp.gmail.com',
+    //     port: 465,
+    //     secure: true,
+    //     auth: {
+    //       user: `${process.env.YOUR_CLOUD_NAME}@gmail.com`,
+    //       pass: process.env.GMAIL_SENHA_APP
+    //     }
+    //   }
+    // );
+
+    // const transport = nodemailer.createTransport({
+    //   service: 'SendGrid',
+    //   auth: {
+    //     user: process.env.SENDGRID_USER,
+    //     pass: process.env.SENDGRID_API_KEY,
+    //   },
+    // });
+    
 
     for (e in mailOptionsReceived) { mailOptions[e] = mailOptionsReceived[e]; }
+    
 
-    const result = await transport.sendMail(mailOptions);
-    return result;
-  } catch (error) {
-    return error;
-  }
+    console.log("32", mailOptions)
+
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    // const result = await transport.sendMail(mailOptions);
+    // console.log("35", result)
+    // return result;
+
+    sgMail
+      .send(mailOptions)
+      .then(() => console.log('E-mail enviado!'))
+      .catch((error) => console.error('Erro ao enviar e-mail:', error));
+
+  // } catch (error) {
+  //   return error;
+  // }
 }
+
+
+
+
+// const msg = {
+//   to: 'example@example.com',
+//   from: 'you@example.com',
+//   subject: 'Inscrição Confirmada',
+//   html: '<h1>Confirme sua inscrição clicando no link</h1>',
+// };
+
+
+
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
@@ -124,7 +161,7 @@ exports.postLogin = (req, res, next) => {
             req.session.isLoggedIn = true;
             req.session.user = user;
             return req.session.save(err => {
-              console.log(err);
+              console.log('127', err);
               res.redirect('/');
             });
           }
@@ -140,7 +177,7 @@ exports.postLogin = (req, res, next) => {
           });
         })
         .catch(err => {
-          console.log(err);
+          console.log('143', err);
           res.redirect('/login');
         });
     })
@@ -158,7 +195,7 @@ exports.postSignup = (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors.array());
+    console.log("161: if (!errors.isEmpty())", errors.array());
     return res.status(422).render('auth/signup', {
       path: '/signup',
       pageTitle: 'Inscrever-se',
@@ -184,6 +221,7 @@ exports.postSignup = (req, res, next) => {
       return user.save();
     })
     .then(result => {
+      console.log("linha 187")
       res.redirect('/login');
       const confirmLink = `${appUrl}confirm/${result.confirmationToken}`;
       mailOptions['to'] = email;
@@ -196,7 +234,7 @@ exports.postSignup = (req, res, next) => {
           return result;
         })
         .catch(err => {
-          console.log(err.message);
+          console.log("200", err.message);
           return err;
         });
 
@@ -210,7 +248,7 @@ exports.postSignup = (req, res, next) => {
 
 exports.postLogout = (req, res, next) => {
   req.session.destroy(err => {
-    console.log(err);
+    console.log("214", err);
     res.redirect('/');
   });
 };
@@ -232,7 +270,7 @@ exports.getReset = (req, res, next) => {
 exports.postReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
-      console.log(err);
+      console.log("236", err);
       return res.redirect('/reset');
     }
     const token = buffer.toString('hex');
@@ -260,13 +298,13 @@ exports.postReset = (req, res, next) => {
               return result;
             })
             .catch(err => {
-              console.log(err.message);
+              console.log("264", err.message);
               return err;
             });
         }
       })
       .catch(err => {
-        console.log(err);
+        console.log("270", err);
         const error = new Error(err);
         error.httpStatusCode = 500;
         return next(error);
@@ -341,7 +379,7 @@ exports.confirmSignUp = (req, res, next) => {
       let message;
       if (!user) {
         const err = 'Erro na atualização do token: expirado ou inválido!';
-        console.log(err);
+        console.log("345", err);
         message = err;
       } else { message = null; }
       // Redirecione ou renderize uma página de confirmação bem-sucedida

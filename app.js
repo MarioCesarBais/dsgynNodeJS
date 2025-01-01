@@ -1,6 +1,6 @@
 const cloudinary = require('cloudinary').v2;
 
-// require('dotenv').config(); // para produção comentar esta linha e informar variáveis de ambiente em settings
+require('dotenv').config(); // para produção comentar esta linha e informar variáveis de ambiente em settings
 
 const path = require('path');
 const fs = require('fs');

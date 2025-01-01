@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+*:hover {
+  transition-duration: 2s;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -78,7 +82,7 @@ form {
 .main-header__item button:active {
   color: #ffeb3b;
   scale: 120%;
-  transition: 2s;
+  /* transition: 2s; */
 }
 
 .mobile-nav {
@@ -135,7 +139,7 @@ form {
   color: white;
   border-radius: 3px;
   scale: 120%;
-  transition: 2s;
+  /* transition: 2s; */
 }
 
 #side-menu-toggle {
@@ -157,7 +161,7 @@ form {
   color: #ffeb3b;
   border-color: #ffeb3b;
   scale: 120%;
-  transition: 2s;
+  /* transition: 2s; */
 }
 
 .backdrop {
@@ -245,7 +249,7 @@ card__image img {
   background: red;
   color: white;
   scale: 120%;
-  transition: 2s;
+  /* transition: 2s; */
 }
 
 .user-message {
@@ -283,7 +287,7 @@ card__image img {
   background: #00695c;
   color: white;
   scale: 120%;
-  transition: 2s;
+  /* transition: 2s; */
 }
 
 button:hover,
@@ -291,7 +295,7 @@ button:hover,
 a:hover {
   scale: 150%;
   font-weight: bolder;
-  transition: 2s;
+  /* transition: 2s; */
   color: yellow;
 }
 

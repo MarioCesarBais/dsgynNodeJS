@@ -69,7 +69,7 @@ i {
     color: black;
     background: rgba(255, 255, 255, 0.7);
     cursor: pointer;
-    transition: .3s;
+    /* transition: .3s; */
     /* margin: 0 auto; Adicione esta linha para centralizar horizontalmente */
 }
 
@@ -93,4 +93,5 @@ i {
 label a {
     text-decoration: none;
     color: #fff;
+    /* transition: 3s !important; */
 }
