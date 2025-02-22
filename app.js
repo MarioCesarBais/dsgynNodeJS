@@ -27,7 +27,7 @@ const User = require('./models/user');
 const app = express();
 
 // Use as variáveis de ambiente conforme necessário no seu código
-const mongoUser = process.env.MONGO_USER;
+const mongoUser = process.env.MONGODB_USER;
 const mongoPassword = process.env.MONGO_PASSWORD;
 const mongoDefaultDatabase = process.env.MONGO_DEFAULT_DATABASE;
 

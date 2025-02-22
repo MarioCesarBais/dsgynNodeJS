@@ -1,4 +1,4 @@
-const sgMail = require('@sendgrid/mail');
+// const sgMail = require('@sendgrid/mail');
 
 const crypto = require('crypto');
 
@@ -11,6 +11,9 @@ const User = require('../models/user');
 const herokuAppName = process.env.HEROKU_APP_NAME;
 const appUrl = herokuAppName ? "https://${herokuAppName}.herokuapp.com/" : `http://localhost:${process.env.PORT}/`;
 console.log("11", appUrl)
+
+// const doc = DocumentApp.create('Hello, world!');
+
 
 let mailOptions = {
   from: 'Mario Cesar Bais <mariocfbais@gmail.com>'
@@ -37,6 +40,14 @@ async function sendMail(mailOptionsReceived) {
     //     pass: process.env.SENDGRID_API_KEY,
     //   },
     // });
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'mariocfbais@gmail.com', // Seu e-mail do Gmail
+        pass: process.env.GMAIL_SENHA_APP, // A Senha de App gerada
+      },
+    });
     
 
     for (e in mailOptionsReceived) { mailOptions[e] = mailOptionsReceived[e]; }
@@ -44,16 +55,24 @@ async function sendMail(mailOptionsReceived) {
 
     console.log("32", mailOptions)
 
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Erro ao enviar:', error);
+      } else {
+        console.log('E-mail enviado:', info.response);
+      }
+    });
+
+    // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
     // const result = await transport.sendMail(mailOptions);
     // console.log("35", result)
     // return result;
 
-    sgMail
-      .send(mailOptions)
-      .then(() => console.log('E-mail enviado!'))
-      .catch((error) => console.error('Erro ao enviar e-mail:', error));
+    // sgMail
+    //   .send(mailOptions)
+    //   .then(() => console.log('E-mail enviado!'))
+    //   .catch((error) => console.error('Erro ao enviar e-mail:', error));
 
   // } catch (error) {
   //   return error;
