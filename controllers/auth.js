@@ -8,9 +8,9 @@ const { validationResult } = require('express-validator/check');
 
 const User = require('../models/user');
 
-const herokuAppName = process.env.HEROKU_APP_NAME;
-const appUrl = herokuAppName ? "https://${herokuAppName}.herokuapp.com/" : `http://localhost:${process.env.PORT}/`;
-console.log("11", appUrl)
+const appName = process.env.APP_NAME;
+const appUrl = appName ? `https://${appName}.vercel.app/` : `http://localhost:${process.env.PORT}/`;
+console.log("11", appUrl, process.env.APP_NAME)
 
 // const doc = DocumentApp.create('Hello, world!');
 
