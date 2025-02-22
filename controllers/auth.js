@@ -1,133 +1,87 @@
-// const sgMail = require('@sendgrid/mail');
+const crypto = require("crypto");
 
-const crypto = require('crypto');
+const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const { validationResult } = require("express-validator/check");
 
-const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
-const { validationResult } = require('express-validator/check');
+const User = require("../models/user");
 
-const User = require('../models/user');
+// const appName = process.env.APP_NAME;
+// const appUrl = appName
+//   ? `https://${appName}.vercel.app/`
+//   : `http://localhost:${process.env.PORT}/`;
+// console.log("11", appUrl, process.env.APP_NAME);
 
-const appName = process.env.APP_NAME;
-const appUrl = appName ? `https://${appName}.vercel.app/` : `http://localhost:${process.env.PORT}/`;
-console.log("11", appUrl, process.env.APP_NAME)
-
-// const doc = DocumentApp.create('Hello, world!');
+const appUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}/`
+  : `http://localhost:${process.env.PORT}/`;
+console.log("URL da aplicação:", appUrl);
 
 
 let mailOptions = {
-  from: 'Mario Cesar Bais <mariocfbais@gmail.com>'
+  from: "Mario Cesar Bais <mariocfbais@gmail.com>",
 };
 
 async function sendMail(mailOptionsReceived) {
-  // try {
-    // const transport = nodemailer.createTransport(
-    //   {
-    //     host: 'smtp.gmail.com',
-    //     port: 465,
-    //     secure: true,
-    //     auth: {
-    //       user: `${process.env.YOUR_CLOUD_NAME}@gmail.com`,
-    //       pass: process.env.GMAIL_SENHA_APP
-    //     }
-    //   }
-    // );
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "mariocfbais@gmail.com", // Seu e-mail do Gmail
+      pass: process.env.GMAIL_SENHA_APP, // A Senha de App gerada
+    },
+  });
 
-    // const transport = nodemailer.createTransport({
-    //   service: 'SendGrid',
-    //   auth: {
-    //     user: process.env.SENDGRID_USER,
-    //     pass: process.env.SENDGRID_API_KEY,
-    //   },
-    // });
+  for (e in mailOptionsReceived) {
+    mailOptions[e] = mailOptionsReceived[e];
+  }
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'mariocfbais@gmail.com', // Seu e-mail do Gmail
-        pass: process.env.GMAIL_SENHA_APP, // A Senha de App gerada
-      },
-    });
-    
+  console.log("32", mailOptions);
 
-    for (e in mailOptionsReceived) { mailOptions[e] = mailOptionsReceived[e]; }
-    
-
-    console.log("32", mailOptions)
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log('Erro ao enviar:', error);
-      } else {
-        console.log('E-mail enviado:', info.response);
-      }
-    });
-
-    // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-    // const result = await transport.sendMail(mailOptions);
-    // console.log("35", result)
-    // return result;
-
-    // sgMail
-    //   .send(mailOptions)
-    //   .then(() => console.log('E-mail enviado!'))
-    //   .catch((error) => console.error('Erro ao enviar e-mail:', error));
-
-  // } catch (error) {
-  //   return error;
-  // }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Erro ao enviar:", error);
+    } else {
+      console.log("E-mail enviado:", info.response);
+    }
+  });
 }
 
-
-
-
-// const msg = {
-//   to: 'example@example.com',
-//   from: 'you@example.com',
-//   subject: 'Inscrição Confirmada',
-//   html: '<h1>Confirme sua inscrição clicando no link</h1>',
-// };
-
-
-
-
 exports.getLogin = (req, res, next) => {
-  let message = req.flash('error');
+  let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];
   } else {
     message = null;
   }
-  res.render('auth/login', {
-    path: '/login',
-    pageTitle: 'Login',
+  res.render("auth/login", {
+    path: "/login",
+    pageTitle: "Login",
     errorMessage: message,
     oldInput: {
-      email: '',
-      password: ''
+      email: "",
+      password: "",
     },
-    validationErrors: []
+    validationErrors: [],
   });
 };
 
 exports.getSignup = (req, res, next) => {
-  let message = req.flash('error');
+  let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];
   } else {
     message = null;
   }
-  res.render('auth/signup', {
-    path: '/signup',
-    pageTitle: 'Inscrever-se',
+  res.render("auth/signup", {
+    path: "/signup",
+    pageTitle: "Inscrever-se",
     errorMessage: message,
     oldInput: {
-      email: '',
-      password: '',
-      confirmPassword: ''
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
-    validationErrors: []
+    validationErrors: [],
   });
 };
 
@@ -137,70 +91,71 @@ exports.postLogin = (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).render('auth/login', {
-      path: '/login',
-      pageTitle: 'Login',
+    return res.status(422).render("auth/login", {
+      path: "/login",
+      pageTitle: "Login",
       errorMessage: errors.array()[0].msg,
       oldInput: {
         email: email,
-        password: password
+        password: password,
       },
-      validationErrors: errors.array()
+      validationErrors: errors.array(),
     });
   }
 
   User.findOne({ email: email })
-    .then(user => {
+    .then((user) => {
       if (!user) {
-        return res.status(422).render('auth/login', {
-          path: '/login',
-          pageTitle: 'Login',
-          errorMessage: 'E-mail ou Senha inválidos!',
+        return res.status(422).render("auth/login", {
+          path: "/login",
+          pageTitle: "Login",
+          errorMessage: "E-mail ou Senha inválidos!",
           oldInput: {
             email: email,
-            password: password
+            password: password,
           },
-          validationErrors: []
+          validationErrors: [],
         });
       }
 
       if (user.confirmationToken) {
-        const message = "Inscrição ainda não confirmada! Favor clicar no link recebido via e-mail!";
-        return res.render('auth/confirm-signup', {
-          path: '/confirm-signup',
-          pageTitle: 'Inscrição',
-          errorMessage: message
+        const message =
+          "Inscrição ainda não confirmada! Favor clicar no link recebido via e-mail!";
+        return res.render("auth/confirm-signup", {
+          path: "/confirm-signup",
+          pageTitle: "Inscrição",
+          errorMessage: message,
         });
       }
 
       bcrypt
         .compare(password, user.password)
-        .then(doMatch => {
+        .then((doMatch) => {
           if (doMatch) {
             req.session.isLoggedIn = true;
             req.session.user = user;
-            return req.session.save(err => {
-              console.log('127', err);
-              res.redirect('/');
+            return req.session.save((err) => {
+              console.log("127", err);
+              res.redirect("/");
             });
           }
-          return res.status(422).render('auth/login', {
-            path: '/login',
-            pageTitle: 'Login',
-            errorMessage: 'E-mail ou Senha inválidos!',
+          return res.status(422).render("auth/login", {
+            path: "/login",
+            pageTitle: "Login",
+            errorMessage: "E-mail ou Senha inválidos!",
             oldInput: {
               email: email,
-              password: password
+              password: password,
             },
-            validationErrors: []
+            validationErrors: [],
           });
         })
-        .catch(err => {
-          console.log('143', err);
-          res.redirect('/login');
+        .catch((err) => {
+          console.log("143", err);
+          res.redirect("/login");
         });
     })
-    .catch(err => {
+    .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
@@ -215,50 +170,51 @@ exports.postSignup = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log("161: if (!errors.isEmpty())", errors.array());
-    return res.status(422).render('auth/signup', {
-      path: '/signup',
-      pageTitle: 'Inscrever-se',
+    return res.status(422).render("auth/signup", {
+      path: "/signup",
+      pageTitle: "Inscrever-se",
       errorMessage: errors.array()[0].msg,
       oldInput: {
         email: email,
         password: password,
-        confirmPassword: req.body.confirmPassword
+        confirmPassword: req.body.confirmPassword,
       },
-      validationErrors: errors.array()
+      validationErrors: errors.array(),
     });
   }
 
   bcrypt
     .hash(password, 12)
-    .then(hashedPassword => {
+    .then((hashedPassword) => {
       const user = new User({
         email,
         password: hashedPassword,
         role,
-        confirmationToken: crypto.randomBytes(32).toString('hex') // Adiciona o token de confirmação
+        confirmationToken: crypto.randomBytes(32).toString("hex"), // Adiciona o token de confirmação
       });
       return user.save();
     })
-    .then(result => {
-      console.log("linha 187")
-      res.redirect('/login');
+    .then((result) => {
+      console.log("linha 187");
+      res.redirect("/login");
       const confirmLink = `${appUrl}confirm/${result.confirmationToken}`;
-      mailOptions['to'] = email;
-      mailOptions['subject'] = 'DS/Goiânia - Inscrição a Confirmar';
-      mailOptions['html'] = `<h1>Agradecemos o contato! Clicar no link para confirmar a inscrição: ${confirmLink}</h1>`;
+      mailOptions["to"] = email;
+      mailOptions["subject"] = "DS/Goiânia - Inscrição a Confirmar";
+      mailOptions[
+        "html"
+      ] = `<h1>Agradecemos o contato! Clicar no link para confirmar a inscrição: ${confirmLink}</h1>`;
 
       sendMail(mailOptions)
-        .then(result => {
-          console.log('e-Mail sent');
+        .then((result) => {
+          console.log("e-Mail sent");
           return result;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("200", err.message);
           return err;
         });
-
     })
-    .catch(err => {
+    .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
@@ -266,23 +222,23 @@ exports.postSignup = (req, res, next) => {
 };
 
 exports.postLogout = (req, res, next) => {
-  req.session.destroy(err => {
+  req.session.destroy((err) => {
     console.log("214", err);
-    res.redirect('/');
+    res.redirect("/");
   });
 };
 
 exports.getReset = (req, res, next) => {
-  let message = req.flash('error');
+  let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];
   } else {
     message = null;
   }
-  res.render('auth/reset', {
-    path: '/reset',
-    pageTitle: 'Resetar Senha',
-    errorMessage: message
+  res.render("auth/reset", {
+    path: "/reset",
+    pageTitle: "Resetar Senha",
+    errorMessage: message,
   });
 };
 
@@ -290,39 +246,39 @@ exports.postReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
       console.log("236", err);
-      return res.redirect('/reset');
+      return res.redirect("/reset");
     }
-    const token = buffer.toString('hex');
+    const token = buffer.toString("hex");
     User.findOne({ email: req.body.email })
-      .then(user => {
+      .then((user) => {
         if (!user) {
-          req.flash('error', 'Nenhuma conta encontrada com aquele e-mail!');
-          return res.redirect('/reset');
+          req.flash("error", "Nenhuma conta encontrada com aquele e-mail!");
+          return res.redirect("/reset");
         }
         user.resetToken = token;
         user.resetTokenExpiration = Date.now() + 3600000;
         return user.save();
       })
-      .then(result => {
+      .then((result) => {
         if (result) {
-          res.redirect('/');
+          res.redirect("/");
           const resetLink = `${appUrl}reset/${token}`;
-          mailOptions['to'] = req.body.email;
-          mailOptions['subject'] = 'Redefinição de senha';
-          mailOptions['html'] = `<p>Você solicitou a redefinição de senha.</p>
+          mailOptions["to"] = req.body.email;
+          mailOptions["subject"] = "Redefinição de senha";
+          mailOptions["html"] = `<p>Você solicitou a redefinição de senha.</p>
           <p>Clique <a href="${resetLink}">aqui</a> para definir uma nova senha.</p>`;
           sendMail(mailOptions)
-            .then(result => {
-              console.log('e-Mail sent');
+            .then((result) => {
+              console.log("e-Mail sent");
               return result;
             })
-            .catch(err => {
+            .catch((err) => {
               console.log("264", err.message);
               return err;
             });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("270", err);
         const error = new Error(err);
         error.httpStatusCode = 500;
@@ -334,22 +290,22 @@ exports.postReset = (req, res, next) => {
 exports.getNewPassword = (req, res, next) => {
   const token = req.params.token;
   User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
-    .then(user => {
-      let message = req.flash('error');
+    .then((user) => {
+      let message = req.flash("error");
       if (message.length > 0) {
         message = message[0];
       } else {
         message = null;
       }
-      res.render('auth/new-password', {
-        path: '/new-password',
-        pageTitle: 'Nova Senha',
+      res.render("auth/new-password", {
+        path: "/new-password",
+        pageTitle: "Nova Senha",
         errorMessage: message,
         userId: user._id.toString(),
-        passwordToken: token
+        passwordToken: token,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
@@ -365,23 +321,23 @@ exports.postNewPassword = (req, res, next) => {
   User.findOne({
     resetToken: passwordToken,
     resetTokenExpiration: { $gt: Date.now() },
-    _id: userId
+    _id: userId,
   })
-    .then(user => {
+    .then((user) => {
       resetUser = user;
       return bcrypt.hash(newPassword, 12);
     })
-    .then(hashedPassword => {
+    .then((hashedPassword) => {
       resetUser.password = hashedPassword;
       resetUser.resetToken = undefined;
       resetUser.resetTokenExpiration = undefined;
       resetUser.confirmationToken = null;
       return resetUser.save();
     })
-    .then(result => {
-      res.redirect('/login');
+    .then((result) => {
+      res.redirect("/login");
     })
-    .catch(err => {
+    .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
@@ -394,22 +350,24 @@ exports.confirmSignUp = (req, res, next) => {
     { confirmationToken: token },
     { $set: { confirmationToken: null } } // Remove o token de confirmação
   )
-    .then(user => {
+    .then((user) => {
       let message;
       if (!user) {
-        const err = 'Erro na atualização do token: expirado ou inválido!';
+        const err = "Erro na atualização do token: expirado ou inválido!";
         console.log("345", err);
         message = err;
-      } else { message = null; }
+      } else {
+        message = null;
+      }
       // Redirecione ou renderize uma página de confirmação bem-sucedida
-      res.render('auth/confirm-signup', {
-        path: '/confirm-signup',
-        pageTitle: 'Inscrição',
-        errorMessage: message
+      res.render("auth/confirm-signup", {
+        path: "/confirm-signup",
+        pageTitle: "Inscrição",
+        errorMessage: message,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       // Trate erros
-      console.log('Erro na confirmação de inscrição:', err);
+      console.log("Erro na confirmação de inscrição:", err);
     });
 };
