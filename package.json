@@ -4,7 +4,7 @@
   "description": "Sindifisco Nacional - Delegacia Sindical em Goiânia",
   "main": "app.js",
   "engines": {
-    "node": "^16.15.1"
+    "node": "^18.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
