@@ -8,15 +8,9 @@ const User = require("../models/user");
 
 const appName = process.env.APP_NAME;
 const appUrl = appName
-  ? `https://${appName}.vercel.app/`
+  ? `https://${appName}`
   : `http://localhost:${process.env.PORT}/`;
 console.log("11", appUrl, process.env.APP_NAME);
-
-// const appUrl = process.env.VERCEL_URL
-//   ? `https://${process.env.VERCEL_URL}/`
-//   : `http://localhost:${process.env.PORT}/`;
-// console.log("URL da aplicação:", appUrl);
-
 
 let mailOptions = {
   from: "Mario Cesar Bais <mariocfbais@gmail.com>",
