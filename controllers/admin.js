@@ -62,7 +62,6 @@ exports.postAddNoticia = (req, res, next) => {
   noticia
     .save()
     .then(result => {
-      // console.log(result);
       console.log('Noticia criada com sucesso!');
       res.redirect('/admin/noticias');
     })

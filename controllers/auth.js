@@ -10,7 +10,6 @@ const appName = process.env.APP_NAME;
 const appUrl = appName
   ? `${appName}`
   : `http://localhost:${process.env.PORT}/`;
-console.log("11", appUrl, process.env.APP_NAME);
 
 let mailOptions = {
   from: "Mario Cesar Bais <mariocfbais@gmail.com>",
@@ -28,8 +27,6 @@ async function sendMail(mailOptionsReceived) {
   for (e in mailOptionsReceived) {
     mailOptions[e] = mailOptionsReceived[e];
   }
-
-  console.log("32", mailOptions);
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -129,7 +126,7 @@ exports.postLogin = (req, res, next) => {
             req.session.isLoggedIn = true;
             req.session.user = user;
             return req.session.save((err) => {
-              console.log("127", err);
+              console.log("Erro dentro do bcrypt: ", err);
               res.redirect("/");
             });
           }
@@ -145,7 +142,7 @@ exports.postLogin = (req, res, next) => {
           });
         })
         .catch((err) => {
-          console.log("143", err);
+          console.log("Segundo erro dentro do bcrypt: ", err);
           res.redirect("/login");
         });
     })
@@ -163,7 +160,7 @@ exports.postSignup = (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log("161: if (!errors.isEmpty())", errors.array());
+    console.log("163: if (!errors.isEmpty())", errors.array());
     return res.status(422).render("auth/signup", {
       path: "/signup",
       pageTitle: "Inscrever-se",
@@ -189,7 +186,6 @@ exports.postSignup = (req, res, next) => {
       return user.save();
     })
     .then((result) => {
-      console.log("linha 187");
       res.redirect("/login");
       const confirmLink = `${appUrl}confirm/${result.confirmationToken}`;
       mailOptions["to"] = email;
@@ -204,7 +200,7 @@ exports.postSignup = (req, res, next) => {
           return result;
         })
         .catch((err) => {
-          console.log("200", err.message);
+          console.log("Erro em sendMail: ", err.message);
           return err;
         });
     })
@@ -217,7 +213,7 @@ exports.postSignup = (req, res, next) => {
 
 exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
-    console.log("214", err);
+    console.log("Erro em postLogout: ", err);
     res.redirect("/");
   });
 };
@@ -239,7 +235,7 @@ exports.getReset = (req, res, next) => {
 exports.postReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
-      console.log("236", err);
+      console.log("Erro em postReset: ", err);
       return res.redirect("/reset");
     }
     const token = buffer.toString("hex");
@@ -267,13 +263,13 @@ exports.postReset = (req, res, next) => {
               return result;
             })
             .catch((err) => {
-              console.log("264", err.message);
+              console.log("Erro em sendMail: ", err.message);
               return err;
             });
         }
       })
       .catch((err) => {
-        console.log("270", err);
+        ("270", err);
         const error = new Error(err);
         error.httpStatusCode = 500;
         return next(error);
@@ -348,7 +344,7 @@ exports.confirmSignUp = (req, res, next) => {
       let message;
       if (!user) {
         const err = "Erro na atualização do token: expirado ou inválido!";
-        console.log("345", err);
+        console.log("Erro em confirmSignUp: ", err);
         message = err;
       } else {
         message = null;

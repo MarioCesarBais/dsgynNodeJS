@@ -1,22 +1,4 @@
-// const fs = require('fs');
-
-// const deleteFile = (filePath) => {
-//     fs.unlink(filePath, (err) => {
-//         if (err) {
-//             throw (err);
-//         }
-//     });
-// }
-
-// exports.deleteFile = deleteFile;
-
 const cloudinary = require('cloudinary').v2;
-
-// cloudinary.config({
-//   cloud_name: 'your_cloud_name',
-//   api_key: 'your_api_key',
-//   api_secret: 'your_api_secret'
-// });
 
 cloudinary.config({
     cloud_name: process.env.YOUR_CLOUD_NAME,
