@@ -76,14 +76,21 @@ const adminRoutes = require('./routes/admin');
 const noticiaRoutes = require('./routes/noticia');
 const authRoutes = require('./routes/auth');
 
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'access.log'),
-  { flags: 'a' }
-);
+// const accessLogStream = fs.createWriteStream(
+//   path.join(__dirname, 'access.log'),
+//   { flags: 'a' }
+// );
+
+// const fs = require('fs');
+// const path = require('path');
+const accessLogStream = fs.createWriteStream('/tmp/access.log', { flags: 'a' });
+app.use(morgan('combined', { stream: accessLogStream }));
+// app.use(morgan('combined', { stream: accessLogStream }));
+
 
 app.use(helmet());
 app.use(compression());
-app.use(morgan('combined', { stream: accessLogStream }));
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
