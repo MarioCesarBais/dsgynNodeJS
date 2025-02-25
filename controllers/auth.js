@@ -8,7 +8,7 @@ const User = require("../models/user");
 
 const appName = process.env.APP_NAME;
 const appUrl = appName
-  ? `https://${appName}`
+  ? `${appName}`
   : `http://localhost:${process.env.PORT}/`;
 console.log("11", appUrl, process.env.APP_NAME);
 
